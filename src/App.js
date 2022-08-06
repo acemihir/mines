@@ -1,24 +1,24 @@
-import logo from './logo.svg';
+import GamePlay from './pages/GamePlay';
+import {
+  Container,
+  Box
+} from '@mui/material';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import background from './assets/images/hero.png';
 import './App.css';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container className='App' disableGutters={true} maxWidth={false} style={{backgroundImage: `url(${background})`}}>
+      <Box className='overlay'>
+        <Router>
+          <Routes>
+            <Route path={'/'} element={<GamePlay />} />
+          </Routes>
+        </Router>
+      </Box>
+    </Container>
   );
 }
 

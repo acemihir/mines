@@ -1,0 +1,46 @@
+
+.footer-container {
+  margin-top: 30px;
+}
+.footer-icons{
+  width: 36px;
+  height: 36px;
+  margin: 5px;
+}
+.copyright{
+  font-family: 'Mada';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12.5405px;
+  line-height: 16px;
+  letter-spacing: 0.05em;
+  color: #FFFFFF;
+}
+.footer-items{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.solana-speed{
+  font-family: 'Mada';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12.5405px;
+  line-height: 16px;
+  letter-spacing: 0.05em;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  img{
+    width: auto;
+    height: 16px;
+  }
+}
+.footer-divider{
+  background: #212535;
+}
+.divider-container{
+  width: 100%;
+}

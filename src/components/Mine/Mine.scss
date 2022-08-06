@@ -1,0 +1,17 @@
+.mine {
+  background: #22262F;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 7px;
+  margin: 0px;
+  padding: 10px;
+
+  .mine-image {
+    object-fit: cover;
+    width: 100%;
+    height: auto;
+    margin: 0px;
+  }
+}
+.mine.mine-bomb{
+  padding: 2px;
+}

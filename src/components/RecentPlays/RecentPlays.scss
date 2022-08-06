@@ -1,0 +1,35 @@
+.recentplays-container {
+  .recentplays-title{
+    text-align: start;
+    font-family: 'Mada';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 15.6757px;
+    line-height: 20px;
+    letter-spacing: 0.05em;
+    color: #FFFFFF;
+  }
+  .recentplays-text{
+  font-family: 'Mada';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 24px;
+  letter-spacing: 0.155em;
+  color: #FFFFFF;
+  }
+  .table-image{
+    width: 100%;
+    height: 100%;
+  }
+  .table-container {
+    width: 100%;
+    border: 7px solid #212535;
+    border-radius: 10px;  
+
+    .recentplays-point{
+      width: 14px;
+      height: 14px;
+    }
+  }
+}
