@@ -10,10 +10,8 @@ const Footer = () => {
   return (
     <Grid className='footer-container' container>
       <Grid xs={3} />
-      <Grid xs={6}>
-        <Box className='divider-container'>
-          <Divider className='footer-divider' />
-        </Box>
+      <Grid xs={6} className='footer-grid'>
+        <Divider className='footer-divider' />
         <Box>
           <Grid container spacing={4}>
             <Grid className='footer-items' xs={4}>

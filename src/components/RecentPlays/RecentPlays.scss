@@ -22,14 +22,65 @@
     width: 100%;
     height: 100%;
   }
-  .table-container {
-    width: 100%;
+  .recentplays-grid {
+    width: 100;
     border: 7px solid #212535;
-    border-radius: 10px;  
+    border-radius: 10px;
+    background-color: #121519;
+    padding: 20px;
 
-    .recentplays-point{
-      width: 14px;
-      height: 14px;
+    .table-container {
+      width: 100%;
+      .table-header {
+        .table-row th {
+          font-family: 'Mada';
+          font-style: normal;
+          font-weight: 500;
+          font-size: 15.6757px;
+          line-height: 20px;
+          letter-spacing: 0.05em;
+          color: #FFFFFF;
+        }
+      }
+
+      .table-body {
+        .table-row:nth-child(odd) {
+          background-color: #22262F;
+          td:nth-child(4) {
+            color: #286A08;
+          }
+        }
+        .table-row:nth-child(even) {
+          background-color: #343840;
+          td:nth-child(4) {
+            color: #CE461B
+            ;
+          }
+        }
+        .table-row td:nth-child(1), .table-row td:nth-child(3) {
+          color: #767272;
+        }
+        .table-row td:nth-child(2) {
+          color: white;
+        }
+        .table-row td:nth-child(4) {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          img {
+            margin-left: 5px;
+          }
+        }
+      }
+
+      th,td {
+        border: 0px;
+      }
+      .recentplays-point{
+        width: 14px;
+        height: 14px;
+      }
     }
   }
 }

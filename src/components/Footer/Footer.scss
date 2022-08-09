@@ -1,6 +1,11 @@
 
 .footer-container {
   margin-top: 30px;
+
+  .footer-grid {
+    display: flex;
+    flex-direction: column;
+  }
 }
 .footer-icons{
   width: 36px;
@@ -40,7 +45,4 @@
 }
 .footer-divider{
   background: #212535;
-}
-.divider-container{
-  width: 100%;
 }

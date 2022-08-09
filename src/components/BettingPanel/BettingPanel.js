@@ -1,6 +1,8 @@
-import { Box, Grid, Typography } from '@mui/material'
+import { Box, Grid, Button } from '@mui/material'
 import messaging from '../../assets/images/messaging.png'
-import toolbar from '../../assets/images/toolbar.png'
+import solana from '../../assets/images/solana.png'
+import options from '../../assets/images/setting.png'
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import './BettingPanel.scss'
 
 const BettingPanel = () => {
@@ -14,7 +16,20 @@ const BettingPanel = () => {
           <span>&nbsp;</span>
         </Box>
         <Box className='betting-buttons'>
-          <img src={toolbar} />
+          <Box className='betting-amount'>
+            <Box className='betting-amount-value'>
+              <img className='solana-image' src={solana} />
+              <span className='betting-value-text'>0.05</span>
+            </Box>
+            <Box className='betting-amount-control'>
+              <span className='betting-amount-addition'>+</span>
+              <span className='betting-amount-addition'>-</span>
+            </Box>
+          </Box>
+          <Button className='betting-play'><PlayArrowIcon />Play Game</Button>
+          <Box className='betting-options'>
+            <img className='options-image' src={options} />
+          </Box>
         </Box>
         <Box className='betting-values-group'>
           <span className='betting-values'>0.05</span>
