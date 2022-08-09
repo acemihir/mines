@@ -22,22 +22,22 @@ const BettingPanel = () => {
               <span className='betting-value-text'>0.05</span>
             </Box>
             <Box className='betting-amount-control'>
-              <span className='betting-amount-addition'>+</span>
-              <span className='betting-amount-addition'>-</span>
+              <Button className='betting-amount-addition'>+</Button>
+              <Button className='betting-amount-addition'>-</Button>
             </Box>
           </Box>
           <Button className='betting-play'><PlayArrowIcon />Play Game</Button>
-          <Box className='betting-options'>
+          <Button className='betting-options'>
             <img className='options-image' src={options} />
-          </Box>
+          </Button>
         </Box>
         <Box className='betting-values-group'>
-          <span className='betting-values'>0.05</span>
-          <span className='betting-values'>0.10</span>
-          <span className='betting-values'>0.25</span>
-          <span className='betting-values'>0.5</span>
-          <span className='betting-values'>1</span>
-          <span className='betting-values'>2</span>
+          <Button className='betting-values'>0.05</Button>
+          <Button className='betting-values'>0.10</Button>
+          <Button className='betting-values'>0.25</Button>
+          <Button className='betting-values'>0.5</Button>
+          <Button className='betting-values'>1</Button>
+          <Button className='betting-values'>2</Button>
         </Box>
       </Grid>
       <Grid className='messaging-container' xs={4}>

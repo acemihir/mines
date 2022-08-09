@@ -4,6 +4,7 @@
   border-radius: 7px;
   margin: 0px;
   padding: 10px;
+  cursor: pointer;
 
   .mine-image {
     object-fit: cover;
@@ -14,4 +15,8 @@
 }
 .mine.mine-bomb{
   padding: 2px;
+}
+.mine:hover{
+  transition: 0.5s;
+  transform: scale(1.1, 1.1);
 }

@@ -1,6 +1,6 @@
 import {
   Box,
-  Grid
+  Button
 } from '@mui/material'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
@@ -17,17 +17,17 @@ const Header = () => {
     <>
       <Box className='navbar'>
         <Box className='control-options navbar-group' sx={{ display: { ms: 'none', md: 'block' } }}>
-          <span className='navbar-item'><img className='control-option-image' src={speaker} /></span>
-          <span className='navbar-item'><img className='control-option-image' src={scale} /></span>
-          <span className='navbar-item'>LIGHT</span>
+          <Button className='navbar-item'><img className='control-option-image' src={speaker} /></Button>
+          <Button className='navbar-item'><img className='control-option-image' src={scale} /></Button>
+          <Button className='navbar-item'>LIGHT</Button>
         </Box>
         <Box className='navlinks navbar-group'>
-          <span className='navbar-item'>RECENT</span>
-          <span className='navbar-item'>
+          <Button className='navbar-item'>RECENT</Button>
+          <Button className='navbar-item'>
             STATS&nbsp;
             <img className='control-option-image' src={chart} />
-          </span>
-          <span className='navbar-item'>CONNECT</span>
+          </Button>
+          <Button className='navbar-item'>CONNECT</Button>
           <img className='balance-image' src={coin} />
         </Box>
       </Box>
