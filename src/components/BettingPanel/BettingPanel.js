@@ -1,4 +1,12 @@
-import { Box, Grid, Button, Modal, Typography, TextField } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Button,
+  Modal,
+  Typography,
+  TextField,
+  Slider,
+} from "@mui/material";
 import messaging from "../../assets/images/messaging.png";
 import solana from "../../assets/images/solana.png";
 import options from "../../assets/images/setting.png";
@@ -144,7 +152,12 @@ const BettingPanel = () => {
             onClick={onOpen}
             disabled={gameState == 0 ? false : true}
           >
-            <img className="options-image" src={options} />
+            {/* <img className="options-image" src={options}>
+              
+            </img> */}
+            <div className="options-image " image={options}>
+              {mineAmount}
+            </div>
           </Button>
         </Box>
         <Box className="betting-values-group">
@@ -257,6 +270,24 @@ const BettingPanel = () => {
         aria-labelledby="parent-modal-title"
         aria-describedby="parent-modal-description"
       >
+        {/* <Box>
+          <Typography id="non-linear-slider" gutterBottom>
+            Storage: {valueLabelFormat(calculateValue(value))}
+          </Typography>
+          <Slider
+            value={value}
+            min={2}
+            step={1}
+            max={24}
+            scale={calculateValue}
+            getAriaValueText={valueLabelFormat}
+            valueLabelFormat={valueLabelFormat}
+            onChange={handleChange}
+            valueLabelDisplay="auto"
+            aria-labelledby="non-linear-slider"
+          />
+        </Box> */}
+
         <Box sx={style}>
           <h2 id="parent-modal-title">STOP</h2>
           <p id="parent-modal-description">

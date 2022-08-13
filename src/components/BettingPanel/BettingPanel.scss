@@ -1,34 +1,33 @@
 .bettingpanel-container {
-
   .settings-text {
     display: flex;
     justify-content: space-between;
 
     .setting-amount {
-      font-family: 'Mada';
+      font-family: "Mada";
       font-style: normal;
       font-weight: 600;
       font-size: 14px;
       line-height: 18px;
       letter-spacing: 0.05em;
-      color: #FFFFFF;
+      color: #ffffff;
     }
     .minmax-values {
-      font-family: 'Mada';
+      font-family: "Mada";
       font-style: normal;
       font-weight: 500;
       font-size: 13px;
       line-height: 17px;
       letter-spacing: 0.05em;
-      color: #FFFFFF;
+      color: #ffffff;
     }
     .betsetting-value {
-      color: #F7BE44;
+      color: #f7be44;
     }
   }
   .betting-buttons {
     width: 100%;
-    background: #22262F;
+    background: #22262f;
     border-radius: 7px;
     margin: 20px 0px;
     padding: 5px 5px;
@@ -51,29 +50,29 @@
           width: auto;
         }
         .betting-value-text {
-          font-family: 'Mada';
+          font-family: "Mada";
           font-style: normal;
           font-weight: 600;
           font-size: 1.25rem;
           line-height: 23px;
           letter-spacing: 0.05em;
 
-          color: #FFFFFF;
+          color: #ffffff;
         }
       }
       .betting-amount-control {
         display: flex;
         flex-direction: column;
 
-        .betting-amount-addition{
-          font-family: 'Mada';
+        .betting-amount-addition {
+          font-family: "Mada";
           font-style: normal;
           font-weight: 600;
           font-size: 1.25rem;
           line-height: 1rem;
           letter-spacing: 0.05em;
-          color: #FFFFFF;
-          background: #181A20;
+          color: #ffffff;
+          background: #181a20;
           border-radius: 2px;
           padding: 0px 5px;
           margin: 5px;
@@ -81,11 +80,12 @@
       }
     }
     .betting-play {
-      background: #F7BE44;
-      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25);
+      background: #f7be44;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25),
+        0px 4px 4px rgba(0, 0, 0, 0.25);
       border-radius: 7px;
 
-      font-family: 'Mada';
+      font-family: "Mada";
       font-style: normal;
       font-weight: 500;
       font-size: 1.5rem;
@@ -96,32 +96,40 @@
       padding: 5px 25px;
     }
     .betting-options {
-      background: #1C1F26;
+      background: #1c1f26;
       padding: 5px;
       border-radius: 5rem;
       display: flex;
       align-items: center;
 
       .options-image {
-        height: 2rem;
-        width: auto;
+        height: 50px;
+        width: 48px;
+        font-family: "Inter";
+        font-style: normal;
+        font-weight: 700;
+        font-size: 30px;
+        // line-height: 29px;
+        text-align: center;
+        color: #fff;
+        // vertical-align: middle;
       }
     }
   }
   .betting-values-group {
     width: 100%;
-    background: #22262F;
+    background: #22262f;
     border-radius: 7px;
     display: flex;
     justify-content: space-around;
     padding: 10px 5px;
 
-    
-    .betting-values{
+    .betting-values {
       width: 53px;
       height: 24px;
-      background: #F7BE44;
-      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25);
+      background: #f7be44;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25),
+        0px 4px 4px rgba(0, 0, 0, 0.25);
       border-radius: 7px;
       color: black;
     }
@@ -130,7 +138,7 @@
     text-align: end;
     padding-right: 50px;
 
-    .message-link{
+    .message-link {
       width: 57px;
       height: 57px;
       border-radius: 57px;
