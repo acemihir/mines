@@ -6,7 +6,6 @@ import "./App.css";
 import useGameStore from "./GameStore";
 
 function App() {
-  const { boardState } = useGameStore();
   return (
     <Container
       className="App"
