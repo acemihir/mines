@@ -6,6 +6,9 @@ const useGameStore = create((set) => ({
   boardState: [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   ],
+  boardClickedState: [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ],
   gameStep: 1,
   nextMultiplier: 1,
   gameHistory: [
@@ -23,7 +26,7 @@ const useGameStore = create((set) => ({
     },
   ],
   bettingAmount: 0.5,
-  mineAmount: 10,
+  mineAmount: 3,
   houseEdge: 0.99,
   gameState: 0, // 0:before start, 1 : now playing,
   setNextMultiplier: (val) => {
@@ -47,7 +50,9 @@ const useGameStore = create((set) => ({
   setBoardState: (value) => {
     set({ boardState: value });
   },
-
+  setBoardClickedState: (val) => {
+    set({ boardRevealedState: val });
+  },
   setGameHistory: (value) => {
     set({ gameHistory: value });
   },

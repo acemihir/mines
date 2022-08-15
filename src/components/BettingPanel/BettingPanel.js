@@ -10,6 +10,9 @@ import {
 import messaging from "../../assets/images/messaging.png";
 import solana from "../../assets/images/solana.png";
 import options from "../../assets/images/setting.png";
+import yellowRectangle from "../../assets/images/yellowrectangle.png";
+
+import claimEmotion from "../../assets/images/claimEmotion.png";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import "./BettingPanel.scss";
 import axios from "axios";
@@ -20,6 +23,7 @@ const BettingPanel = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [playModalOpen, setPlayModalOpen] = useState(false);
   const [stopModalOpen, setStopModalOpen] = useState(false);
+  const { boardClickedState, setBoardClickedState } = useGameStore();
 
   const { walletAddress, setwalletAddress } = useGameStore();
   const { boardState, setBoardState } = useGameStore();
@@ -44,7 +48,15 @@ const BettingPanel = () => {
       setStopModalOpen(true);
       return;
     }
-    setPlayModalOpen(true);
+    const cboardState = [
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    ];
+    setGameStep(gameStep + 1);
+    changeNextMultiplier();
+    setBoardState(cboardState);
+    setBoardClickedState(cboardState);
+    setGameState(1);
+    setPlayModalOpen(false);
     await postPlay();
   };
 
@@ -67,14 +79,39 @@ const BettingPanel = () => {
     setPlayModalOpen(false);
   };
 
-  const onClickStopGame = () => {
-    setGameState(0);
-    setGameStep(1);
-    const cboardState = [
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    ];
-    setBoardState(cboardState);
+  const onClickStopGame = async () => {
+    console.log("heredfdfdf");
+    const newBoardState = boardState;
+    // const boardNum = 0;
+    const body = {
+      walletAddress,
+    };
+    await axios
+      .post(`${process.env.REACT_APP_BACKEND_URL}/api/stop`, body)
+      .then((res) => {
+        console.log(res.data);
+        setGameState(0);
+        const allBoardState = JSON.parse(res.data.board.boardString);
+        allBoardState.forEach((item, key) => {
+          console.log("sdf");
+          if (item === 0) allBoardState[key] = 1;
+          else allBoardState[key] = 2;
+        });
+        console.log(allBoardState);
+        setGameStep(0);
+        setNextMultiplier(1);
+        revealBoardState(allBoardState);
+      });
     setStopModalOpen(false);
+  };
+
+  const revealBoardState = (allBoardState) => {
+    boardState.map((item, key) => {
+      if (boardClickedState[key] === 0)
+        if (allBoardState[key] === 1) allBoardState[key] = 3;
+        else allBoardState[key] = 4;
+    });
+    setBoardState(allBoardState);
   };
 
   const onClickCloseButton = () => {
@@ -108,6 +145,10 @@ const BettingPanel = () => {
     console.log(res.data);
   };
 
+  const handleSliderChange = (event, newVal) => {
+    setMineAmount(newVal);
+  };
+
   return (
     <Grid className="bettingpanel-container" container>
       <Grid xs={4} />
@@ -115,8 +156,8 @@ const BettingPanel = () => {
         <Box className="settings-text">
           <span className="setting-amount">Sol Amount</span>
           <span className="minmax-values">
-            Min. Mine: <span className="betsetting-value">0.05</span> Max. Mine:{" "}
-            <span className="betsetting-value">2</span>
+            Min. Mine: <span className="betsetting-value">2</span> Max. Mine:{" "}
+            <span className="betsetting-value">24</span>
           </span>
           <span>&nbsp;</span>
         </Box>
@@ -218,7 +259,15 @@ const BettingPanel = () => {
       >
         <Box sx={style}>
           <Grid>
-            <TextField
+            <Typography
+              id="modal-modal-title"
+              variant="h6"
+              component="h2"
+              style={{ color: "#fff" }}
+            >
+              Mine Amount is {mineAmount}
+            </Typography>
+            {/* <TextField
               id="outlined-number"
               label="Mine Amount ( Max : 24, Min 1 )"
               type="number"
@@ -230,17 +279,30 @@ const BettingPanel = () => {
               onChange={(e) => {
                 setMineAmount(e.target.value);
               }}
-            />
+            /> */}
           </Grid>
           <Grid>
-            <Button
-              variant="contained"
-              style={{ marginTop: "10px" }}
-              onClick={onClickCloseButton}
-            >
-              OK
-            </Button>
+            <Slider
+              defaultValue={mineAmount}
+              min={2}
+              max={24}
+              aria-label="Default"
+              valueLabelDisplay="auto"
+              style={{ color: "#F7BE44" }}
+              onChange={handleSliderChange}
+            />
           </Grid>
+          <Button
+            variant="contained"
+            style={{
+              marginTop: "10px",
+              color: "#000",
+              backgroundColor: "#F7BE44",
+            }}
+            onClick={onClickCloseButton}
+          >
+            OK
+          </Button>
         </Box>
       </Modal>
       <Modal
@@ -250,17 +312,30 @@ const BettingPanel = () => {
         aria-describedby="parent-modal-description"
       >
         <Box sx={style}>
-          <h2 id="parent-modal-title">Your Betting Info</h2>
-          <p id="parent-modal-description">Mine Amount : {mineAmount}</p>
-          <p id="parent-modal-description">
-            Betting Amount : {bettingAmount} SOL
+          <h1 id="parent-modal-title" style={{ color: "#fff" }}>
+            Your Betting Info
+          </h1>
+          <p id="parent-modal-description" style={{ color: "#fff" }}>
+            <span>Mine Amount : </span>
+            <span style={{ color: "#F7BE44" }}>{mineAmount} </span>
           </p>
+          <p id="parent-modal-description" style={{ color: "#fff" }}>
+            <span>Betting Amount : </span>
+            <span style={{ color: "#F7BE44" }}>{bettingAmount}</span>
+            <span> SOL </span>
+          </p>
+
           <Button
             variant="contained"
-            style={{ marginTop: "10px" }}
+            style={{
+              marginTop: "10px",
+              color: "#000",
+              backgroundColor: "#F7BE44",
+            }}
             onClick={onClickStartGame}
+            fontSize="10px"
           >
-            START GAME
+            Start Game
           </Button>
         </Box>
       </Modal>
@@ -270,40 +345,38 @@ const BettingPanel = () => {
         aria-labelledby="parent-modal-title"
         aria-describedby="parent-modal-description"
       >
-        {/* <Box>
-          <Typography id="non-linear-slider" gutterBottom>
-            Storage: {valueLabelFormat(calculateValue(value))}
-          </Typography>
-          <Slider
-            value={value}
-            min={2}
-            step={1}
-            max={24}
-            scale={calculateValue}
-            getAriaValueText={valueLabelFormat}
-            valueLabelFormat={valueLabelFormat}
-            onChange={handleChange}
-            valueLabelDisplay="auto"
-            aria-labelledby="non-linear-slider"
-          />
-        </Box> */}
-
-        <Box sx={style}>
-          <h2 id="parent-modal-title">STOP</h2>
-          <p id="parent-modal-description">
-            You Earned :{" "}
+        <Box sx={styleStop}>
+          <Typography color="#F7BE44" fontSize="70px" fontFamily="Mada">
+            x
             {parseFloat(
               (nextMultiplier * houseEdge * bettingAmount).toFixed(2)
-            )}{" "}
-            SOL
-          </p>
-          <Button
-            variant="contained"
-            style={{ marginTop: "10px" }}
-            onClick={onClickStopGame}
-          >
-            Stop Now
-          </Button>
+            )}
+          </Typography>
+
+          <Grid container style={{ textAlign: "center" }}>
+            <Grid item xs={12}>
+              <img className="claimEmotion" src={claimEmotion}></img>
+            </Grid>
+          </Grid>
+          <Grid item xs={12}>
+            <Grid item xs={12}>
+              <span style={{ color: "#FFFFFF" }}>You Won </span>
+              <span style={{ color: "#F7BE44" }}>0.25</span>
+            </Grid>
+            <Button
+              variant="contained"
+              style={{
+                marginTop: "10px",
+                color: "#000",
+                backgroundColor: "#F7BE44",
+              }}
+              onClick={onClickStopGame}
+              fontSize="10px"
+            >
+              Claim Reward
+            </Button>
+            <img className="yellow-image-claim" src={yellowRectangle}></img>
+          </Grid>
         </Box>
       </Modal>
     </Grid>
@@ -316,12 +389,28 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 200,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  borderRadius: "30px",
+  width: 300,
+  bgcolor: "#1C1F26",
+  // border: "2px solid #000",
+  borderRadius: "10px",
   boxShadow: 24,
   p: 4,
+};
+
+const styleStop = {
+  textAlign: "center",
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "246px",
+  height: "auto",
+  bgcolor: "#101112",
+  // border: "2px solid #000",
+  borderRadius: "10px",
+  boxShadow: 24,
+  p: 4,
+  padding: "0px",
 };
 
 export default BettingPanel;

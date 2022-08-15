@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import background from "./assets/images/hero.png";
 import "./App.css";
 import useGameStore from "./GameStore";
+import "@fontsource/mada";
 
 function App() {
   return (

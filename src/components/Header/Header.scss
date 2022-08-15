@@ -4,7 +4,7 @@
   padding: 5px 50px;
 
   .navbar-group {
-    background-color:rgba(16, 16, 20, 0.21);
+    background-color: rgba(16, 16, 20, 0.21);
     border-radius: 10px;
     height: 60px;
     display: flex;
@@ -20,7 +20,7 @@
       margin: 0px 10px;
       font-size: 16px;
       color: white;
-      font-family: 'Mada';
+      font-family: "Mada";
       align-items: center;
       justify-content: center;
       cursor: pointer;
@@ -37,7 +37,7 @@
       width: 120px;
     }
 
-    .balance-image{
+    .balance-image {
       width: 39px;
       border: solid 2px white;
       border-radius: 39px;
@@ -49,12 +49,24 @@
 .sol-balance {
   display: block;
   text-align: end;
-  font-family: 'Mada';
+  font-family: "Mada";
   font-style: normal;
   font-weight: 500;
   font-size: 20px;
   line-height: 26px;
   letter-spacing: 0.05em;
-  color: #FFFFFF;
+  color: #ffffff;
   margin-right: 50px;
+}
+
+.rectangle-image {
+  width: 65%;
+  height: 2px;
+  margin: 5px;
+}
+
+.yellow-image {
+  margin-top: 25px;
+  margin-bottom: 10px;
+  width: 270px;
 }
