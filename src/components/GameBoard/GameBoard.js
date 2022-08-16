@@ -52,6 +52,7 @@ const GameBoard = () => {
       .post(`${process.env.REACT_APP_BACKEND_URL}/api/checkMine`, body)
       .then((res) => {
         const newBoardClickedState = boardClickedState;
+        console.log(boardClickedState);
         newBoardClickedState[boardNum] = 1;
         setBoardClickedState(newBoardClickedState);
         if (res.data.result === "bomb") {
@@ -65,12 +66,19 @@ const GameBoard = () => {
             else allBoardState[key] = 2;
           });
           console.log(allBoardState);
+          const cboardState = [
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0,
+          ];
+          setBoardClickedState(cboardState);
           setGameStep(0);
           setNextMultiplier(1);
           revealBoardState(allBoardState);
+          console.log(boardClickedState);
           return;
         }
         newBoardState[boardNum] = 1;
+        console.log(boardClickedState);
 
         if (1 * gameStep + 1 * mineAmount == 26) {
           revealBoardState();
@@ -96,6 +104,10 @@ const GameBoard = () => {
         else allBoardState[key] = 4;
     });
     setBoardState(allBoardState);
+    const cboardState = [
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    ];
+    setBoardClickedState(cboardState);
   };
 
   const onClickStopGame = async () => {

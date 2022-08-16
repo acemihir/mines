@@ -44,3 +44,17 @@
   font-family: "Mada";
   src: url("./assets/fonts/Mada-Regular.ttf") format("truetype");
 }
+
+/* 
+.wallet-adapter-modal-middle-button {
+  display: block;
+  cursor: pointer;
+  margin-top: 48px;
+  width: 100%;
+  background-color: #101014;
+  padding: 12px;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+} */

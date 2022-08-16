@@ -10,16 +10,60 @@ import chart from "../../assets/images/chart.png";
 import "./Header.scss";
 import yellowrectangle from "../../assets/images/yellowrectangle.png";
 import rectangleImage from "../../assets/images/rectangle.png";
+import useGameStore from "../../GameStore";
+import {
+  WalletMultiButton,
+  useWalletModal,
+  WalletConnectButton,
+  WalletDisconnectButton,
+} from "@solana/wallet-adapter-react-ui";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { useEffect } from "react";
 
 library.add(fas);
 const Header = () => {
+  const { connection } = useConnection();
+  const { publicKey, sendTransaction } = useWallet();
+  const {
+    ready,
+    connected,
+    connecting,
+    disconnecting,
+    select,
+    connect,
+    disconnect,
+  } = useWallet();
+  const { setVisible } = useWalletModal();
+
   const [gameOverModalOpen, setGameOverModalOpen] = useState(false);
+  const { bettingAmount, setBettingAmount } = useGameStore();
   const onClickScale = () => {
     setGameOverModalOpen(true);
   };
 
   const handleGameOverModalClose = () => {
     setGameOverModalOpen(false);
+  };
+
+  const connectWallet = (val) => {
+    console.log(connected, connecting, disconnecting);
+    if (val == 0) {
+      setVisible(true);
+    } else if (val == 1) {
+      connect();
+    } else if (val == 2) {
+      disconnect();
+    }
+  };
+
+  const solWallet = () => {
+    // console.log(connected, connecting, disconnecting);
+
+    if (!connected) {
+      return <WalletMultiButton />;
+    } else if (connected) {
+      return <WalletDisconnectButton />;
+    }
   };
 
   return (
@@ -43,7 +87,8 @@ const Header = () => {
             STATS&nbsp;
             <img className="control-option-image" src={chart} />
           </Button>
-          <Button className="navbar-item">CONNECT</Button>
+          {solWallet()}
+
           <img className="balance-image" src={coin} />
         </Box>
       </Box>
@@ -105,6 +150,13 @@ const styleFair = {
   boxShadow: 24,
   p: 4,
   padding: "0px",
+};
+
+const walletButtonStyle = {
+  backgroundColor: "#fff",
+  color: "#fff",
+  height: "39px",
+  fontSize: "10px",
 };
 
 export default Header;

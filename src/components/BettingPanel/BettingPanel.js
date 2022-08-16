@@ -46,17 +46,27 @@ const BettingPanel = () => {
   const onPlay = async () => {
     if (gameState == 1) {
       setStopModalOpen(true);
+
+      setGameStep(gameStep + 1);
+
+      setBoardState(cboardState);
+
+      setGameState(0);
+
       return;
     }
+    console.log("play game");
     const cboardState = [
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     ];
-    setGameStep(gameStep + 1);
+    setGameStep(0);
     changeNextMultiplier();
     setBoardState(cboardState);
     setBoardClickedState(cboardState);
     setGameState(1);
-    setPlayModalOpen(false);
+    console.log(boardClickedState);
+
+    // setPlayModalOpen(false);
     await postPlay();
   };
 
@@ -184,9 +194,13 @@ const BettingPanel = () => {
               </Button>
             </Box>
           </Box>
-          <Button className="betting-play" onClick={onPlay}>
+          <Button
+            className="betting-play"
+            onClick={onPlay}
+            style={{ textTransform: "none" }}
+          >
             <PlayArrowIcon />
-            {gameState == 0 ? "Play Game" : "Stop Game"}
+            {gameState == 0 ? "Play Game" : "Cash-Out"}
           </Button>
           <Button
             className="betting-options"
@@ -335,7 +349,7 @@ const BettingPanel = () => {
             onClick={onClickStartGame}
             fontSize="10px"
           >
-            Start Game
+            START GAME
           </Button>
         </Box>
       </Modal>

@@ -17,21 +17,21 @@ const Mine = ({ type }) => {
       : "mine"
   );
   useEffect(() => {
-    console.log(type);
+    // .log(type);console
     let anim = false;
     if (1 * type !== 0) {
-      console.log("if");
+      // console.log("if");
       anim = true;
       setAnimation(true);
     }
 
-    console.log(animation);
+    // console.log(animation);
     if (type === 2)
       if (anim) setMineClassName("mine mine-bomb animation");
       else setMineClassName("mine mine-bomb");
     else if (anim) setMineClassName("mine animation");
     else setMineClassName("mine");
-    console.log(mineClassName);
+    // log(mineClassName);console.
 
     if (type === 3) {
       setMineClassName(mineClassName + " " + "revealed ");
@@ -50,7 +50,7 @@ const Mine = ({ type }) => {
   // }, []);
 
   useEffect(() => {
-    console.log(animation);
+    // console.log(animation);
   }, [animation]);
 
   useEffect(() => {
