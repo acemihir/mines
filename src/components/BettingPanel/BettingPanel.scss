@@ -79,6 +79,7 @@
         }
       }
     }
+
     .betting-play {
       background: #f7be44;
       box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25),
@@ -93,7 +94,10 @@
       letter-spacing: 0.05em;
       color: #000000;
 
-      padding: 5px 25px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      padding-left: 44px;
+      padding-right: 40px;
     }
     .betting-options {
       background: #1c1f26;

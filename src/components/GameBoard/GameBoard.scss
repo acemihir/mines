@@ -7,7 +7,13 @@
   line-height: 20px;
   letter-spacing: 0.05em;
   color: #ffffff;
-
+  display: "flex";
+  justify-content: "center";
+  background-color: rgba(16, 16, 20, 0.75);
+  border-radius: 7px;
+  padding-left: 7px;
+  padding-right: 7px;
+  margin-bottom: 5px;
   .multiplier-value {
     font-family: "Mada";
     font-style: normal;

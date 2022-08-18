@@ -38,7 +38,7 @@ const GameBoard = () => {
       tempMultiplier *= (25 - i) / (25 - i - mineAmount);
     }
     setNextMultiplier(tempMultiplier);
-    console.log(`Gameboard : ${tempMultiplier}`);
+    // console.log(`Gameboard : ${tempMultiplier}`);
   };
 
   const clickEvent = async (boardNum) => {
@@ -170,12 +170,14 @@ const GameBoard = () => {
 
   return (
     <>
-      <Typography className="multiplier">
-        Next Multiplier{" "}
-        <span className="multiplier-value">
-          X{parseFloat((nextMultiplier * houseEdge).toFixed(2))}
-        </span>
-      </Typography>
+      <div style={{ display: "flex", justifyContent: "center", margin: "5px" }}>
+        <Typography className="multiplier">
+          Next Multiplier
+          <span className="multiplier-value">
+            &nbsp; X{parseFloat((nextMultiplier * houseEdge).toFixed(2))}
+          </span>
+        </Typography>
+      </div>
       <Grid className="gameboard-container" container>
         <Grid xs={4} />
         <Grid xs={4}>

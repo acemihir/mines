@@ -11,6 +11,7 @@ import messaging from "../../assets/images/messaging.png";
 import solana from "../../assets/images/solana.png";
 import options from "../../assets/images/setting.png";
 import yellowRectangle from "../../assets/images/yellowrectangle.png";
+import { houseAddress } from "../../constants";
 
 import claimEmotion from "../../assets/images/claimEmotion.png";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
@@ -18,11 +19,17 @@ import "./BettingPanel.scss";
 import axios from "axios";
 import useGameStore from "../../GameStore";
 import { useState } from "react";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import * as solanaWeb3 from "@solana/web3.js";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { sign } from "crypto";
 
 const BettingPanel = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [playModalOpen, setPlayModalOpen] = useState(false);
   const [stopModalOpen, setStopModalOpen] = useState(false);
+  const [connectWalletModalOpen, setConnectWalletModalOpen] = useState(false);
+
   const { boardClickedState, setBoardClickedState } = useGameStore();
 
   const { walletAddress, setwalletAddress } = useGameStore();
@@ -34,6 +41,10 @@ const BettingPanel = () => {
   const { nextMultiplier, setNextMultiplier } = useGameStore();
   const { houseEdge } = useGameStore();
 
+  const { connected } = useWallet();
+  const { publicKey, sendTransaction } = useWallet();
+  const { connection } = useConnection();
+
   const changeNextMultiplier = () => {
     let tempMultiplier = 1;
     for (let i = 0; i < gameStep; i++) {
@@ -44,6 +55,13 @@ const BettingPanel = () => {
   };
 
   const onPlay = async () => {
+    if (!connected) {
+      console.log("plz connect wallet");
+      setConnectWalletModalOpen(true);
+
+      return;
+    }
+
     if (gameState == 1) {
       setStopModalOpen(true);
 
@@ -55,6 +73,9 @@ const BettingPanel = () => {
 
       return;
     }
+
+    const sig = deposit();
+
     console.log("play game");
     const cboardState = [
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -70,12 +91,70 @@ const BettingPanel = () => {
     await postPlay();
   };
 
+  const deposit = async () => {
+    let amount = bettingAmount;
+    console.log(publicKey);
+    const transaction = new solanaWeb3.Transaction().add(
+      solanaWeb3.SystemProgram.transfer({
+        fromPubkey: publicKey,
+        toPubkey: new solanaWeb3.PublicKey(houseAddress),
+        lamports: solanaWeb3.LAMPORTS_PER_SOL * amount,
+      })
+    );
+
+    const blockhashObj = await connection.getLatestBlockhash();
+    transaction.recentBlockhash = await blockhashObj.blockhash;
+    console.log("transsaction");
+    const signature = await sendTransaction(transaction, connection);
+
+    console.log("transaction has sent");
+
+    await connection.confirmTransaction(signature);
+    console.log("transaction has confirmed");
+
+    const status = await connection.getSignatureStatus(signature, {
+      searchTransactionHistory: true,
+    });
+    console.log(status.value);
+
+    const body = {
+      walletAddress: publicKey,
+      signature,
+      bettingAmount,
+    };
+
+    await axios
+      .post(`${process.env.REACT_APP_BACKEND_URL}/verifyDeposit`, body)
+      .then((res) => {
+        console.log("success");
+      })
+      .catch((err) => {
+        console.log("err");
+      });
+
+    const tran = await connection.getParsedTransaction(signature);
+    console.log(tran);
+    // const tran = await connection.getTransaction(
+    //   "3WEpQPoopzKuEgGZJVpo9PCAdX4Lh8n8aNnqyDJiahTpyDMP3BzCT9Z257UG8uHVAWGLELG713fWDs64g4wT8tmk"
+    // );
+    // console.log(tran);
+    // return signature;
+  };
+
   const handlePlayModalClose = () => {
     setPlayModalOpen(false);
   };
 
   const handleStopModalClose = () => {
     setStopModalOpen(false);
+  };
+
+  const handleConnectWalletModalClose = () => {
+    setConnectWalletModalOpen(false);
+  };
+
+  const onClickConnectWallet = () => {
+    console.log("connectWallet");
   };
 
   const onClickStartGame = () => {
@@ -163,7 +242,10 @@ const BettingPanel = () => {
     <Grid className="bettingpanel-container" container>
       <Grid xs={4} />
       <Grid xs={4}>
-        <Box className="settings-text">
+        <Box
+          className="settings-text"
+          style={{ marginTop: "20px", marginBottom: "5px" }}
+        >
           <span className="setting-amount">Sol Amount</span>
           <span className="minmax-values">
             Min. Mine: <span className="betsetting-value">2</span> Max. Mine:{" "}
@@ -171,7 +253,7 @@ const BettingPanel = () => {
           </span>
           <span>&nbsp;</span>
         </Box>
-        <Box className="betting-buttons">
+        <Box className="betting-buttons" style={{ marginTop: "0px" }}>
           <Box className="betting-amount">
             <Box className="betting-amount-value">
               <img className="solana-image" src={solana} />
@@ -279,7 +361,7 @@ const BettingPanel = () => {
               component="h2"
               style={{ color: "#fff" }}
             >
-              Mine Amount is {mineAmount}
+              Number of Mines : {mineAmount}
             </Typography>
             {/* <TextField
               id="outlined-number"
@@ -351,6 +433,32 @@ const BettingPanel = () => {
           >
             START GAME
           </Button>
+        </Box>
+      </Modal>
+      <Modal
+        open={connectWalletModalOpen}
+        onClose={handleConnectWalletModalClose}
+        aria-labelledby="parent-modal-title"
+        aria-describedby="parent-modal-description"
+      >
+        <Box sx={style}>
+          <h2 id="parent-modal-title" style={{ color: "#fff" }}>
+            Please connect your Wallet
+          </h2>
+
+          {/* <Button
+            variant="contained"
+            style={{
+              marginTop: "10px",
+              color: "#000",
+              backgroundColor: "#F7BE44",
+            }}
+            onClick={onClickConnectWallet}
+            fontSize="10px"
+          >
+            Connect
+          </Button> */}
+          {/* <WalletMultiButton /> */}
         </Box>
       </Modal>
       <Modal

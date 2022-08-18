@@ -2,7 +2,6 @@ import { Box, Button, Modal, Typography, Grid } from "@mui/material";
 import { useState } from "react";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import coin from "../../assets/images/coin.png";
 import speaker from "../../assets/images/speaker.png";
 import scale from "../../assets/images/scale.png";
@@ -14,7 +13,6 @@ import useGameStore from "../../GameStore";
 import {
   WalletMultiButton,
   useWalletModal,
-  WalletConnectButton,
   WalletDisconnectButton,
 } from "@solana/wallet-adapter-react-ui";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
@@ -43,17 +41,6 @@ const Header = () => {
 
   const handleGameOverModalClose = () => {
     setGameOverModalOpen(false);
-  };
-
-  const connectWallet = (val) => {
-    console.log(connected, connecting, disconnecting);
-    if (val == 0) {
-      setVisible(true);
-    } else if (val == 1) {
-      connect();
-    } else if (val == 2) {
-      disconnect();
-    }
   };
 
   const solWallet = () => {

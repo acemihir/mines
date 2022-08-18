@@ -5,12 +5,15 @@
   margin: 0px;
   padding: 10px;
   cursor: pointer;
+  // width: 40px;
+  // height: 40px;
 
   .mine-image {
     object-fit: cover;
-    width: 100%;
+    // margin-top: 10px;
+    width: 80%;
     height: auto;
-    margin: 0px;
+    // margin: 5px;
   }
 }
 
