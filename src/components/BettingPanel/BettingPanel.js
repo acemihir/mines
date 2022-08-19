@@ -32,50 +32,63 @@ const BettingPanel = () => {
 
   const { boardClickedState, setBoardClickedState } = useGameStore();
 
-  const { walletAddress, setwalletAddress } = useGameStore();
+  const { walletAddress, setWalletAddress } = useGameStore();
   const { boardState, setBoardState } = useGameStore();
   const { mineAmount, setMineAmount } = useGameStore();
+
   const { bettingAmount, setBettingAmount } = useGameStore();
   const { gameState, setGameState } = useGameStore();
   const { gameStep, setGameStep } = useGameStore();
   const { nextMultiplier, setNextMultiplier } = useGameStore();
   const { houseEdge } = useGameStore();
-
+  const [mineSliderAmount, setMineSliderAmount] = useState(mineAmount);
   const { connected } = useWallet();
   const { publicKey, sendTransaction } = useWallet();
+
   const { connection } = useConnection();
 
   const changeNextMultiplier = () => {
+    console.log(`Betting panel gameStep : ${gameStep}`);
+    console.log(`Betting panel mineAmount : ${mineSliderAmount}`);
+
     let tempMultiplier = 1;
-    for (let i = 0; i < gameStep; i++) {
-      tempMultiplier *= 25 / (25 - mineAmount);
+    for (let i = 0; i < gameStep + 1; i++) {
+      tempMultiplier *= 25 / (25 - mineSliderAmount);
     }
     setNextMultiplier(tempMultiplier);
-    console.log(`Betting panel : ${tempMultiplier}`);
+    console.log(`Betting panel multiplier : ${tempMultiplier}`);
   };
 
   const onPlay = async () => {
+    // wallet integration
     if (!connected) {
       console.log("plz connect wallet");
       setConnectWalletModalOpen(true);
-
       return;
     }
+
+    setWalletAddress(publicKey.toBase58());
+    console.log(`walletAddress in gameStore is ${walletAddress}`);
+    console.log(publicKey.toBase58());
 
     if (gameState == 1) {
       setStopModalOpen(true);
 
-      setGameStep(gameStep + 1);
+      // setGameStep(gameStep + 1);
+      // const cboardState = [
+      //   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      //   0,
+      // ];
+      // setBoardState(cboardState);
 
-      setBoardState(cboardState);
-
-      setGameState(0);
+      // setGameState(0);
 
       return;
     }
 
-    const sig = deposit();
-
+    // wallet integration
+    const result = await deposit();
+    if (!result) console.log("false-----------------");
     console.log("play game");
     const cboardState = [
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -84,10 +97,13 @@ const BettingPanel = () => {
     changeNextMultiplier();
     setBoardState(cboardState);
     setBoardClickedState(cboardState);
-    setGameState(1);
+    // setGameState(1);
+    console.log("boardclickedstate is ----------");
     console.log(boardClickedState);
 
-    // setPlayModalOpen(false);
+    console.log("boardstate is ---------------------");
+    console.log(boardState);
+
     await postPlay();
   };
 
@@ -102,15 +118,22 @@ const BettingPanel = () => {
       })
     );
 
-    const blockhashObj = await connection.getLatestBlockhash();
-    transaction.recentBlockhash = await blockhashObj.blockhash;
     console.log("transsaction");
     const signature = await sendTransaction(transaction, connection);
+
+    let tx = null;
+    while (tx == null) {
+      console.log("ddd");
+      tx = await connection.getTransaction(signature, {
+        commitment: "finalized",
+      });
+    }
 
     console.log("transaction has sent");
 
     await connection.confirmTransaction(signature);
-    console.log("transaction has confirmed");
+
+    console.log("transaction confirmed");
 
     const status = await connection.getSignatureStatus(signature, {
       searchTransactionHistory: true,
@@ -126,19 +149,18 @@ const BettingPanel = () => {
     await axios
       .post(`${process.env.REACT_APP_BACKEND_URL}/verifyDeposit`, body)
       .then((res) => {
-        console.log("success");
+        if (res.data.result == "success") {
+          console.log("success");
+          setGameState(1);
+          return true;
+        } else {
+          console.log("fail");
+          return false;
+        }
       })
       .catch((err) => {
         console.log("err");
       });
-
-    const tran = await connection.getParsedTransaction(signature);
-    console.log(tran);
-    // const tran = await connection.getTransaction(
-    //   "3WEpQPoopzKuEgGZJVpo9PCAdX4Lh8n8aNnqyDJiahTpyDMP3BzCT9Z257UG8uHVAWGLELG713fWDs64g4wT8tmk"
-    // );
-    // console.log(tran);
-    // return signature;
   };
 
   const handlePlayModalClose = () => {
@@ -177,7 +199,24 @@ const BettingPanel = () => {
     };
     await axios
       .post(`${process.env.REACT_APP_BACKEND_URL}/api/stop`, body)
-      .then((res) => {
+      .then(async (res) => {
+        const body = {
+          walletAddress: publicKey.toBase58(),
+          game: "Minerush",
+          player: publicKey.toBase58(),
+          wager: bettingAmount,
+          payout: nextMultiplier * bettingAmount,
+        };
+        console.log(body);
+        await axios
+          .post(`${process.env.REACT_APP_BACKEND_URL}/api/saveHistory`, body)
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+
         console.log(res.data);
         setGameState(0);
         const allBoardState = JSON.parse(res.data.board.boardString);
@@ -205,6 +244,7 @@ const BettingPanel = () => {
 
   const onClickCloseButton = () => {
     if ((mineAmount > 24) | (mineAmount < 1)) return;
+    setMineAmount(mineSliderAmount);
     changeNextMultiplier();
     setModalOpen(false);
   };
@@ -222,9 +262,11 @@ const BettingPanel = () => {
   const onOpen = () => setModalOpen(true);
 
   const postPlay = async () => {
+    console.log("post play");
     const body = {
-      walletAddress,
+      walletAddress: publicKey,
       mineAmount,
+      bettingAmount,
     };
 
     let res = await axios.post(
@@ -235,7 +277,7 @@ const BettingPanel = () => {
   };
 
   const handleSliderChange = (event, newVal) => {
-    setMineAmount(newVal);
+    setMineSliderAmount(newVal);
   };
 
   return (
@@ -282,6 +324,7 @@ const BettingPanel = () => {
             style={{ textTransform: "none" }}
           >
             <PlayArrowIcon />
+
             {gameState == 0 ? "Play Game" : "Cash-Out"}
           </Button>
           <Button
@@ -290,8 +333,8 @@ const BettingPanel = () => {
             disabled={gameState == 0 ? false : true}
           >
             {/* <img className="options-image" src={options}>
-              
-            </img> */}
+            
+          </img> */}
             <div className="options-image " image={options}>
               {mineAmount}
             </div>
@@ -361,7 +404,7 @@ const BettingPanel = () => {
               component="h2"
               style={{ color: "#fff" }}
             >
-              Number of Mines : {mineAmount}
+              Number of Mines : {mineSliderAmount}
             </Typography>
             {/* <TextField
               id="outlined-number"
@@ -469,10 +512,7 @@ const BettingPanel = () => {
       >
         <Box sx={styleStop}>
           <Typography color="#F7BE44" fontSize="70px" fontFamily="Mada">
-            x
-            {parseFloat(
-              (nextMultiplier * houseEdge * bettingAmount).toFixed(2)
-            )}
+            x{parseFloat((nextMultiplier * houseEdge).toFixed(2))}
           </Typography>
 
           <Grid container style={{ textAlign: "center" }}>
@@ -483,7 +523,11 @@ const BettingPanel = () => {
           <Grid item xs={12}>
             <Grid item xs={12}>
               <span style={{ color: "#FFFFFF" }}>You Won </span>
-              <span style={{ color: "#F7BE44" }}>0.25</span>
+              <span style={{ color: "#F7BE44" }}>
+                {parseFloat(
+                  (nextMultiplier * houseEdge * bettingAmount).toFixed(2)
+                )}
+              </span>
             </Grid>
             <Button
               variant="contained"

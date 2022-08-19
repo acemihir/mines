@@ -33,16 +33,35 @@ const RecentPlays = () => {
   useEffect(() => {
     getHistory();
   }, []);
+  const getShortName = (fullName) => {
+    return (
+      fullName.slice(0, 3) +
+      "..." +
+      fullName.slice(fullName.length - 4, fullName.length - 1)
+    );
+  };
 
   const historyList = gameHistory.map((item, key) => {
+    let payout = item.payout;
+    let earn = true;
+    if (item.payout == 0) {
+      payout = "-" + item.wager;
+      earn = false;
+    } else {
+      payout = parseFloat(payout.toFixed(2));
+    }
+
     return (
       <>
         <TableRow className="table-row">
           <TableCell align="center">{item.game}</TableCell>
-          <TableCell align="center">{item.player}</TableCell>
+          <TableCell align="center">{getShortName(item.player)}</TableCell>
           <TableCell align="center">{item.wager}</TableCell>
-          <TableCell align="center">
-            {item.payout}
+          <TableCell
+            align="center"
+            style={earn ? { color: " #286A08" } : { color: "#CE461B" }}
+          >
+            {payout}
             <img src={point} className="recentplays-point" />
           </TableCell>
         </TableRow>

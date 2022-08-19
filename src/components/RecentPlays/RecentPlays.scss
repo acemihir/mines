@@ -1,24 +1,24 @@
 .recentplays-container {
-  .recentplays-title{
+  .recentplays-title {
     text-align: start;
-    font-family: 'Mada';
+    font-family: "Mada";
     font-style: normal;
     font-weight: 700;
     font-size: 15.6757px;
     line-height: 20px;
     letter-spacing: 0.05em;
-    color: #FFFFFF;
+    color: #ffffff;
   }
-  .recentplays-text{
-  font-family: 'Mada';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 15px;
-  line-height: 24px;
-  letter-spacing: 0.155em;
-  color: #FFFFFF;
+  .recentplays-text {
+    font-family: "Mada";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 24px;
+    letter-spacing: 0.155em;
+    color: #ffffff;
   }
-  .table-image{
+  .table-image {
     width: 100%;
     height: 100%;
   }
@@ -33,31 +33,32 @@
       width: 100%;
       .table-header {
         .table-row th {
-          font-family: 'Mada';
+          font-family: "Mada";
           font-style: normal;
           font-weight: 500;
           font-size: 15.6757px;
           line-height: 20px;
           letter-spacing: 0.05em;
-          color: #FFFFFF;
+          color: #ffffff;
         }
       }
 
       .table-body {
         .table-row:nth-child(odd) {
-          background-color: #22262F;
-          td:nth-child(4) {
-            color: #286A08;
-          }
+          background-color: #22262f;
+          // td:nth-child(4) {
+          //   color: #286A08;
+          // }
         }
         .table-row:nth-child(even) {
           background-color: #343840;
-          td:nth-child(4) {
-            color: #CE461B
-            ;
-          }
+          // td:nth-child(4) {
+          //   color: #CE461B
+          //   ;
+          // }
         }
-        .table-row td:nth-child(1), .table-row td:nth-child(3) {
+        .table-row td:nth-child(1),
+        .table-row td:nth-child(3) {
           color: #767272;
         }
         .table-row td:nth-child(2) {
@@ -74,10 +75,11 @@
         }
       }
 
-      th,td {
+      th,
+      td {
         border: 0px;
       }
-      .recentplays-point{
+      .recentplays-point {
         width: 14px;
         height: 14px;
       }

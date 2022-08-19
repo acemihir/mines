@@ -2,14 +2,14 @@ import create from "zustand";
 import produce from "immer";
 
 const useGameStore = create((set) => ({
-  walletAddress: "0x34dfvdfer33223dfsdf",
+  walletAddress: "0x12345",
   boardState: [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   ],
   boardClickedState: [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   ],
-  gameStep: 1,
+  gameStep: 0,
   nextMultiplier: 1,
   gameHistory: [
     {
@@ -26,7 +26,7 @@ const useGameStore = create((set) => ({
     },
   ],
   bettingAmount: 0.5,
-  mineAmount: 3,
+  mineAmount: 24,
   houseEdge: 0.99,
   gameState: 0, // 0:before start, 1 : now playing,
   setNextMultiplier: (val) => {
@@ -51,7 +51,7 @@ const useGameStore = create((set) => ({
     set({ boardState: value });
   },
   setBoardClickedState: (val) => {
-    set({ boardRevealedState: val });
+    set({ boardClickedState: val });
   },
   setGameHistory: (value) => {
     set({ gameHistory: value });

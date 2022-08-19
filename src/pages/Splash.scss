@@ -1,0 +1,25 @@
+.splash {
+  display: flex;
+  justify-content: space-around;
+  background-color: #101223;
+  height: 100vh;
+  .frog-background {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    top: 40vh;
+    left: 45vw;
+    // width: 6.25vw;
+    width: 7vw;
+    height: 7vw;
+    // height: 6.25vw;
+    border: 8px solid #f7be44;
+    border-radius: 50%;
+    // text-align: center;
+    .frog {
+      width: 4vw;
+    }
+  }
+}

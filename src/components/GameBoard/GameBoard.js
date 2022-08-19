@@ -15,6 +15,7 @@ import rectangleImage from "../../assets/images/rectangle.png";
 import yellowrectangle from "../../assets/images/yellowrectangle.png";
 import claimEmotion from "../../assets/images/claimEmotion.png";
 import yellowRectangle from "../../assets/images/yellowrectangle.png";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 
 const GameBoard = () => {
   const { gameState, setGameState } = useGameStore();
@@ -23,39 +24,80 @@ const GameBoard = () => {
   const { boardClickedState, setBoardClickedState } = useGameStore();
   const [gameOverModalOpen, setGameOverModalOpen] = useState(false);
   const [winModalOpen, setWinModalOpen] = useState(false);
+  const [winFinalModalOpen, setWinFinalModalOpen] = useState(false);
 
   const { nextMultiplier, setNextMultiplier } = useGameStore();
   const { gameStep, setGameStep } = useGameStore();
   const { mineAmount, setMineAmount } = useGameStore();
   const { houseEdge } = useGameStore();
+  const [winModalMultiplier, setWinModalMultiplier] = useState(1);
+  const { publicKey, sendTransaction } = useWallet();
   useEffect(() => {
     changeNextMultiplier();
   }, []);
 
   const changeNextMultiplier = () => {
+    console.log(`gamestep in chageNextMutliplier is ${gameStep}`);
+    if (gameState == 0) {
+      let tempMultiplier = 1;
+      for (let i = 0; i < gameStep + 1; i++) {
+        tempMultiplier *= (25 - i) / (25 - i - mineAmount);
+      }
+      setNextMultiplier(tempMultiplier);
+      if (gameStep > 0) {
+        let tempMultiplier = 1;
+        for (let i = 0; i < gameStep; i++) {
+          tempMultiplier *= (25 - i) / (25 - i - mineAmount);
+        }
+        setWinModalMultiplier(tempMultiplier);
+        console.log(`winModalMultiplier is ${winModalMultiplier}`);
+      }
+      return;
+    }
     let tempMultiplier = 1;
-    for (let i = 0; i < gameStep; i++) {
+    for (let i = 0; i < gameStep + 2; i++) {
       tempMultiplier *= (25 - i) / (25 - i - mineAmount);
     }
     setNextMultiplier(tempMultiplier);
-    // console.log(`Gameboard : ${tempMultiplier}`);
   };
 
   const clickEvent = async (boardNum) => {
+    // if user click a button that already clicked, it will rejected
+    if (boardClickedState[boardNum] == 1) return;
+
+    // if gameState == 0, game not started
     if (gameState == 0) return;
+
     const newBoardState = boardState;
     const body = {
-      walletAddress,
+      walletAddress: publicKey.toBase58(),
       boardNum,
     };
     let res = await axios
       .post(`${process.env.REACT_APP_BACKEND_URL}/api/checkMine`, body)
-      .then((res) => {
+      .then(async (res) => {
         const newBoardClickedState = boardClickedState;
         console.log(boardClickedState);
         newBoardClickedState[boardNum] = 1;
         setBoardClickedState(newBoardClickedState);
         if (res.data.result === "bomb") {
+          const body = {
+            walletAddress: publicKey.toBase58(),
+            game: "Minerush",
+            player: publicKey.toBase58(),
+            wager: bettingAmount,
+            payout: 0,
+          };
+          console.log(body);
+          await axios
+            .post(`${process.env.REACT_APP_BACKEND_URL}/api/saveHistory`, body)
+            .then((res) => {
+              console.log(res);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+
           console.log(res.data);
           setGameState(0);
           // setGameOverModalOpen(true);
@@ -71,6 +113,7 @@ const GameBoard = () => {
             0, 0,
           ];
           setBoardClickedState(cboardState);
+          console.log(boardClickedState);
           setGameStep(0);
           setNextMultiplier(1);
           revealBoardState(allBoardState);
@@ -80,15 +123,62 @@ const GameBoard = () => {
         newBoardState[boardNum] = 1;
         console.log(boardClickedState);
 
-        if (1 * gameStep + 1 * mineAmount == 26) {
-          revealBoardState();
-          setWinModalOpen(true);
+        console.log(gameStep, mineAmount);
+
+        if (1 * gameStep + 1 * mineAmount == 24) {
+          // await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/getFullBoardState`, body)
+          // .then((res) => {
+
+          // })
+          // .catch((err) => {
+          //   console.log(err)
+          // })
+
+          // const allBoardState = JSON.parse(res.data.board.boardString);
+          // allBoardState.forEach((item, key) => {
+          //   console.log("sdf");
+          //   if (item === 0) allBoardState[key] = 1;
+          //   else allBoardState[key] = 2;
+          // });
+
+          // revealBoardState();
+
+          const body = {
+            walletAddress: publicKey.toBase58(),
+            game: "Minerush",
+            player: publicKey.toBase58(),
+            wager: bettingAmount,
+            payout: nextMultiplier * bettingAmount,
+          };
+          console.log(body);
+          await axios
+            .post(`${process.env.REACT_APP_BACKEND_URL}/api/saveHistory`, body)
+            .then((res) => {
+              console.log(res);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+
+          const cboardState = [
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0,
+          ];
+          setBoardClickedState(cboardState);
+          setWinModalMultiplier(nextMultiplier);
+          setWinFinalModalOpen(true);
           setGameState(0);
+          setGameStep(0);
+
+          setNextMultiplier(1);
+
           console.log("here");
           return;
         }
-        console.log("after");
+        console.log(`--------------Game step is ${gameStep}`);
         setGameStep(gameStep + 1);
+        console.log(`--------------Game step After set is ${gameStep}`);
+
         changeNextMultiplier();
         setBoardState(newBoardState);
       })
@@ -98,6 +188,7 @@ const GameBoard = () => {
   };
 
   const revealBoardState = (allBoardState) => {
+    console.log(allBoardState);
     boardState.map((item, key) => {
       if (boardClickedState[key] === 0)
         if (allBoardState[key] === 1) allBoardState[key] = 3;
@@ -115,7 +206,7 @@ const GameBoard = () => {
     const newBoardState = boardState;
     const boardNum = 0;
     const body = {
-      walletAddress,
+      walletAddress: publicKey.toBase58(),
       boardNum,
     };
     await axios
@@ -138,8 +229,13 @@ const GameBoard = () => {
   const handleGameOverModalClose = () => {
     setGameOverModalOpen(false);
   };
+
   const handleWinModalClose = () => {
     setWinModalOpen(false);
+  };
+
+  const handleWinFinalModalClose = () => {
+    setWinFinalModalOpen(false);
   };
 
   const onClickCloseBtn = () => {
@@ -261,6 +357,51 @@ const GameBoard = () => {
               >
                 Claim Reward
               </Button>
+              <img className="yellow-image-claim" src={yellowRectangle}></img>
+            </Grid>
+          </Box>
+        </Modal>
+
+        <Modal
+          open={winFinalModalOpen}
+          onClose={handleWinFinalModalClose}
+          aria-labelledby="parent-modal-title"
+          aria-describedby="parent-modal-description"
+        >
+          <Box sx={styleStop}>
+            <Typography color="#F7BE44" fontSize="70px" fontFamily="Mada">
+              x{parseFloat((winModalMultiplier * houseEdge).toFixed(2))}
+            </Typography>
+
+            <Grid container style={{ textAlign: "center" }}>
+              <Grid item xs={12}>
+                <img className="claimEmotion" src={claimEmotion}></img>
+              </Grid>
+            </Grid>
+            <Grid item xs={12}>
+              <Grid item xs={12}>
+                <span style={{ color: "#FFFFFF" }}>You Won </span>
+                <span style={{ color: "#F7BE44" }}>
+                  {" "}
+                  {parseFloat(
+                    (winModalMultiplier * houseEdge * bettingAmount).toFixed(2)
+                  )}
+                </span>
+              </Grid>
+
+              {/* <Button
+                variant="contained"
+                style={{
+                  marginTop: "10px",
+                  color: "#000",
+                  backgroundColor: "#F7BE44",
+                }}
+                onClick={onClickStopGame}
+                fontSize="10px"
+              >
+                Claim Reward
+              </Button> */}
+
               <img className="yellow-image-claim" src={yellowRectangle}></img>
             </Grid>
           </Box>
