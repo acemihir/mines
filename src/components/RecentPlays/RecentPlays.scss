@@ -46,16 +46,9 @@
       .table-body {
         .table-row:nth-child(odd) {
           background-color: #22262f;
-          // td:nth-child(4) {
-          //   color: #286A08;
-          // }
         }
         .table-row:nth-child(even) {
           background-color: #343840;
-          // td:nth-child(4) {
-          //   color: #CE461B
-          //   ;
-          // }
         }
         .table-row td:nth-child(1),
         .table-row td:nth-child(3) {

@@ -17,9 +17,12 @@ import {
 } from "@solana/wallet-adapter-react-ui";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useEffect } from "react";
+import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 
 library.add(fas);
 const Header = () => {
+  const [solAmount, setSolAmountState] = useState(0);
+  // const { solAmount, setSolAmount } = useGameStore();
   const { connection } = useConnection();
   const { publicKey, sendTransaction } = useWallet();
   const {
@@ -79,7 +82,8 @@ const Header = () => {
           <img className="balance-image" src={coin} />
         </Box>
       </Box>
-      <span className="sol-balance">SOL 10.045</span>
+      {/* <span className="sol-balance">SOL {solAmount}</span> */}
+      <span className="sol-balance"></span>
       <Modal
         open={gameOverModalOpen}
         onClose={handleGameOverModalClose}

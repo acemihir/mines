@@ -119,10 +119,12 @@ const BettingPanel = ({ loading, setLoading }) => {
     );
 
     console.log("transsaction");
+
     const signature = await sendTransaction(transaction, connection);
+    setLoading(true);
 
     let tx = null;
-    setLoading(true);
+
     while (tx == null) {
       console.log("ddd");
       tx = await connection.getTransaction(signature, {
