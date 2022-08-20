@@ -18,11 +18,13 @@ import {
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useEffect } from "react";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
+import * as solanaWeb3 from "@solana/web3.js";
 
 library.add(fas);
 const Header = () => {
-  const [solAmount, setSolAmountState] = useState(0);
+  const [solAmountState, setSolAmountState] = useState(0);
   // const { solAmount, setSolAmount } = useGameStore();
+  // const [ solAmount, setSolAmount ] = useState();
   const { connection } = useConnection();
   const { publicKey, sendTransaction } = useWallet();
   const {
@@ -45,6 +47,27 @@ const Header = () => {
   const handleGameOverModalClose = () => {
     setGameOverModalOpen(false);
   };
+
+  useEffect(() => {
+    // if (connected) {
+    //   const solana  = new solanaWeb3.Connection
+    //   setSolAmount();
+
+    // }
+    const ttt = async () => {
+      if (connected) {
+        const connection = new solanaWeb3.Connection(
+          "https://morning-multi-arm.solana-testnet.quiknode.pro/22b4b8c2eb7cadba89b66fecf29008d0273da20e"
+        );
+        let balance = await connection.getBalance(publicKey);
+        balance = balance / LAMPORTS_PER_SOL;
+        balance = parseFloat(balance.toFixed(2));
+        setSolAmountState(balance);
+      }
+    };
+
+    ttt();
+  }, [connected]);
 
   const solWallet = () => {
     // console.log(connected, connecting, disconnecting);
@@ -82,8 +105,8 @@ const Header = () => {
           <img className="balance-image" src={coin} />
         </Box>
       </Box>
-      {/* <span className="sol-balance">SOL {solAmount}</span> */}
-      <span className="sol-balance"></span>
+      <span className="sol-balance">SOL {solAmountState}</span>
+      {/* <span className="sol-balance">solAmount</span> */}
       <Modal
         open={gameOverModalOpen}
         onClose={handleGameOverModalClose}
