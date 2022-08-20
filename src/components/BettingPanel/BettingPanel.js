@@ -122,6 +122,7 @@ const BettingPanel = ({ loading, setLoading }) => {
     const signature = await sendTransaction(transaction, connection);
 
     let tx = null;
+    setLoading(true);
     while (tx == null) {
       console.log("ddd");
       tx = await connection.getTransaction(signature, {
@@ -145,7 +146,7 @@ const BettingPanel = ({ loading, setLoading }) => {
       signature,
       bettingAmount,
     };
-    setLoading(true);
+
     await axios
       .post(`${process.env.REACT_APP_BACKEND_URL}/verifyDeposit`, body)
       .then((res) => {
