@@ -24,7 +24,7 @@ import * as solanaWeb3 from "@solana/web3.js";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { sign } from "crypto";
 
-const BettingPanel = () => {
+const BettingPanel = ({ loading, setLoading }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [playModalOpen, setPlayModalOpen] = useState(false);
   const [stopModalOpen, setStopModalOpen] = useState(false);
@@ -109,7 +109,7 @@ const BettingPanel = () => {
 
   const deposit = async () => {
     let amount = bettingAmount;
-    console.log(publicKey);
+    console.log(amount * solanaWeb3.LAMPORTS_PER_SOL);
     const transaction = new solanaWeb3.Transaction().add(
       solanaWeb3.SystemProgram.transfer({
         fromPubkey: publicKey,
@@ -145,7 +145,7 @@ const BettingPanel = () => {
       signature,
       bettingAmount,
     };
-
+    setLoading(true);
     await axios
       .post(`${process.env.REACT_APP_BACKEND_URL}/verifyDeposit`, body)
       .then((res) => {
@@ -161,6 +161,7 @@ const BettingPanel = () => {
       .catch((err) => {
         console.log("err");
       });
+    setLoading(false);
   };
 
   const handlePlayModalClose = () => {

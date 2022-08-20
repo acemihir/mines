@@ -125,6 +125,7 @@ const GameBoard = () => {
 
         console.log(gameStep, mineAmount);
 
+        // if user WIN
         if (1 * gameStep + 1 * mineAmount == 24) {
           // await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/getFullBoardState`, body)
           // .then((res) => {

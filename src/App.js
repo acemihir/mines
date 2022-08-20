@@ -18,8 +18,6 @@ import {
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 
 import GamePlay from "./pages/GamePlay";
-import Splash from "./pages/Splash";
-import Homepage from "./pages/Homepage";
 import { Container, Box } from "@mui/material";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import background from "./assets/images/hero.png";
@@ -80,10 +78,7 @@ function App() {
             <Box className="overlay">
               <Router>
                 <Routes>
-                  <Route path={"/gameplay"} element={<GamePlay />} />
-                  {/* <Route path={"/splash"} element={<Splash />} /> */}
-                  <Route path={"/splash"} element={<Splash />} />
-                  <Route path={"/"} element={<Homepage />} />
+                  <Route path={"/"} element={<GamePlay />} />
                 </Routes>
               </Router>
             </Box>
