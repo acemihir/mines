@@ -141,7 +141,7 @@ const BettingPanel = () => {
     console.log(status.value);
 
     const body = {
-      walletAddress: publicKey,
+      walletAddress: publicKey.toBase58(),
       signature,
       bettingAmount,
     };
@@ -191,11 +191,11 @@ const BettingPanel = () => {
   };
 
   const onClickStopGame = async () => {
-    console.log("heredfdfdf");
     const newBoardState = boardState;
+    console.log(`boardState is ${boardState}`);
     // const boardNum = 0;
     const body = {
-      walletAddress,
+      walletAddress: publicKey.toBase58(),
     };
     await axios
       .post(`${process.env.REACT_APP_BACKEND_URL}/api/stop`, body)
@@ -220,6 +220,7 @@ const BettingPanel = () => {
         console.log(res.data);
         setGameState(0);
         const allBoardState = JSON.parse(res.data.board.boardString);
+        console.log(allBoardState);
         allBoardState.forEach((item, key) => {
           console.log("sdf");
           if (item === 0) allBoardState[key] = 1;
@@ -264,7 +265,7 @@ const BettingPanel = () => {
   const postPlay = async () => {
     console.log("post play");
     const body = {
-      walletAddress: publicKey,
+      walletAddress: publicKey.toBase58(),
       mineAmount,
       bettingAmount,
     };
