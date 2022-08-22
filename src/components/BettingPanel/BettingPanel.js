@@ -46,6 +46,7 @@ const BettingPanel = ({ loading, setLoading }) => {
   const { publicKey, sendTransaction } = useWallet();
 
   const { connection } = useConnection();
+  const [clicked, setClicked] = useState(false);
 
   const changeNextMultiplier = () => {
     console.log(`Betting panel gameStep : ${gameStep}`);
@@ -195,6 +196,8 @@ const BettingPanel = ({ loading, setLoading }) => {
   };
 
   const onClickStopGame = async () => {
+    if (clicked == true) return;
+    setClicked(true);
     const newBoardState = boardState;
     console.log(`boardState is ${boardState}`);
     // const boardNum = 0;
@@ -216,6 +219,7 @@ const BettingPanel = ({ loading, setLoading }) => {
           .post(`${process.env.REACT_APP_BACKEND_URL}/api/saveHistory`, body)
           .then((res) => {
             console.log(res);
+            setClicked(false);
           })
           .catch((err) => {
             console.log(err);
