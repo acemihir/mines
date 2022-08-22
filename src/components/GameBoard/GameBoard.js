@@ -32,6 +32,8 @@ const GameBoard = () => {
   const { houseEdge } = useGameStore();
   const [winModalMultiplier, setWinModalMultiplier] = useState(1);
   const { publicKey, sendTransaction } = useWallet();
+  const { previousMultiplier, setPreviousMultiplier } = useGameStore();
+
   useEffect(() => {
     changeNextMultiplier();
   }, []);
@@ -39,26 +41,37 @@ const GameBoard = () => {
   const changeNextMultiplier = () => {
     console.log(`gamestep in chageNextMutliplier is ${gameStep}`);
     if (gameState == 0) {
+      setPreviousMultiplier(1);
       let tempMultiplier = 1;
       for (let i = 0; i < gameStep + 1; i++) {
         tempMultiplier *= (25 - i) / (25 - i - mineAmount);
       }
       setNextMultiplier(tempMultiplier);
+      console.log("multi 3 ------------------------");
       if (gameStep > 0) {
         let tempMultiplier = 1;
-        for (let i = 0; i < gameStep; i++) {
+        for (let i = 0; i < gameStep - 1; i++) {
           tempMultiplier *= (25 - i) / (25 - i - mineAmount);
         }
         setWinModalMultiplier(tempMultiplier);
         console.log(`winModalMultiplier is ${winModalMultiplier}`);
       }
       return;
+    } else {
+      let tempMultiplier = 1;
+      for (let i = 0; i < gameStep+1; i++) {
+        tempMultiplier *= (25 - i) / (25 - i - mineAmount);
+      }
+      console.log(`gamestep is ${gameStep}`);
+      setPreviousMultiplier(tempMultiplier);
     }
+
     let tempMultiplier = 1;
     for (let i = 0; i < gameStep + 2; i++) {
       tempMultiplier *= (25 - i) / (25 - i - mineAmount);
     }
     setNextMultiplier(tempMultiplier);
+    console.log("multi 4 ---------------------");
   };
 
   const clickEvent = async (boardNum) => {
@@ -115,7 +128,9 @@ const GameBoard = () => {
           setBoardClickedState(cboardState);
           console.log(boardClickedState);
           setGameStep(0);
+          setPreviousMultiplier(1);
           setNextMultiplier(1);
+          console.log("multi 5 ---------------------");
           revealBoardState(allBoardState);
           console.log(boardClickedState);
           return;
@@ -149,7 +164,7 @@ const GameBoard = () => {
             game: "Minerush",
             player: publicKey.toBase58(),
             wager: bettingAmount,
-            payout: nextMultiplier * bettingAmount,
+            payout: previousMultiplier * bettingAmount,
           };
           console.log(body);
           await axios
@@ -170,8 +185,9 @@ const GameBoard = () => {
           setWinFinalModalOpen(true);
           setGameState(0);
           setGameStep(0);
-
+          setPreviousMultiplier(1);
           setNextMultiplier(1);
+          console.log("multi 6 ---------------------");
 
           console.log("here");
           return;
@@ -222,7 +238,9 @@ const GameBoard = () => {
         });
         console.log(allBoardState);
         setGameStep(0);
+        setPreviousMultiplier(1);
         setNextMultiplier(1);
+        console.log("multi 7 ---------------------");
         revealBoardState(allBoardState);
       });
   };
@@ -271,7 +289,10 @@ const GameBoard = () => {
         <Typography className="multiplier">
           Next Multiplier
           <span className="multiplier-value">
-            &nbsp; X{parseFloat((nextMultiplier * houseEdge).toFixed(2))}
+            &nbsp; X
+            {nextMultiplier == 1
+              ? 1
+              : parseFloat((nextMultiplier * houseEdge).toFixed(2))}
           </span>
         </Typography>
       </div>

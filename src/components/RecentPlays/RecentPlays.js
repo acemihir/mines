@@ -33,6 +33,7 @@ const RecentPlays = () => {
   useEffect(() => {
     getHistory();
   }, []);
+
   const getShortName = (fullName) => {
     return (
       fullName.slice(0, 3) +

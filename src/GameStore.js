@@ -12,6 +12,7 @@ const useGameStore = create((set) => ({
   gameStep: 0,
   solAmount: 0,
   nextMultiplier: 1,
+  previousMultiplier: 1,
   gameHistory: [
     {
       game: "MineRush",
@@ -27,11 +28,14 @@ const useGameStore = create((set) => ({
     },
   ],
   bettingAmount: 0.5,
-  mineAmount: 3,
+  mineAmount: 5,
   houseEdge: 0.99,
   gameState: 0, // 0:before start, 1 : now playing,
   setNextMultiplier: (val) => {
     set({ nextMultiplier: val });
+  },
+  setPreviousMultiplier: (val) => {
+    set({ previousMultiplier: val });
   },
   setGameStep: (val) => {
     set({ gameStep: val });

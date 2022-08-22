@@ -25,6 +25,8 @@ import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { sign } from "crypto";
 
 const BettingPanel = ({ loading, setLoading }) => {
+  const { gameHistory, setGameHistory } = useGameStore();
+
   const [modalOpen, setModalOpen] = useState(false);
   const [playModalOpen, setPlayModalOpen] = useState(false);
   const [stopModalOpen, setStopModalOpen] = useState(false);
@@ -35,6 +37,7 @@ const BettingPanel = ({ loading, setLoading }) => {
   const { walletAddress, setWalletAddress } = useGameStore();
   const { boardState, setBoardState } = useGameStore();
   const { mineAmount, setMineAmount } = useGameStore();
+  const { previousMultiplier, setPreviousMultiplier } = useGameStore();
 
   const { bettingAmount, setBettingAmount } = useGameStore();
   const { gameState, setGameState } = useGameStore();
@@ -48,15 +51,38 @@ const BettingPanel = ({ loading, setLoading }) => {
   const { connection } = useConnection();
   const [clicked, setClicked] = useState(false);
 
+  const getHistory = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_BACKEND_URL}/api/history/get`)
+      .then((res) => {
+        console.log("history -------------------");
+        console.log(res.data);
+        const newGameHistory = res.data;
+        setGameHistory(newGameHistory);
+      });
+  };
+
   const changeNextMultiplier = () => {
     console.log(`Betting panel gameStep : ${gameStep}`);
     console.log(`Betting panel mineAmount : ${mineSliderAmount}`);
+
+    if (gameStep == 0) {
+      setPreviousMultiplier(1);
+    } else {
+      let tempMultiplier = 1;
+      for (let i = 0; i < gameStep - 1; i++) {
+        tempMultiplier *= 25 / (25 - mineSliderAmount);
+      }
+      setPreviousMultiplier(tempMultiplier);
+    }
+    console.log(`nextMultiplier in changeNext is ${nextMultiplier}`);
 
     let tempMultiplier = 1;
     for (let i = 0; i < gameStep + 1; i++) {
       tempMultiplier *= 25 / (25 - mineSliderAmount);
     }
     setNextMultiplier(tempMultiplier);
+    console.log("mutli 1 -------------------------");
     console.log(`Betting panel multiplier : ${tempMultiplier}`);
   };
 
@@ -196,11 +222,14 @@ const BettingPanel = ({ loading, setLoading }) => {
   };
 
   const onClickStopGame = async () => {
+    // if user double clicked "Claim Reward" button, it is ignored
     if (clicked == true) return;
     setClicked(true);
-    const newBoardState = boardState;
+
+    console.log(`cureent multi is ${previousMultiplier}`);
     console.log(`boardState is ${boardState}`);
     // const boardNum = 0;
+
     const body = {
       walletAddress: publicKey.toBase58(),
     };
@@ -219,6 +248,7 @@ const BettingPanel = ({ loading, setLoading }) => {
           .post(`${process.env.REACT_APP_BACKEND_URL}/api/saveHistory`, body)
           .then((res) => {
             console.log(res);
+            getHistory();
             setClicked(false);
           })
           .catch((err) => {
@@ -236,7 +266,9 @@ const BettingPanel = ({ loading, setLoading }) => {
         });
         console.log(allBoardState);
         setGameStep(0);
+        setPreviousMultiplier(1);
         setNextMultiplier(1);
+        console.log("multi 2 -------------------------");
         revealBoardState(allBoardState);
       });
     setStopModalOpen(false);
@@ -521,7 +553,7 @@ const BettingPanel = ({ loading, setLoading }) => {
       >
         <Box sx={styleStop}>
           <Typography color="#F7BE44" fontSize="70px" fontFamily="Mada">
-            x{parseFloat((nextMultiplier * houseEdge).toFixed(2))}
+            x{parseFloat(previousMultiplier.toFixed(2))}
           </Typography>
 
           <Grid container style={{ textAlign: "center" }}>
@@ -534,7 +566,7 @@ const BettingPanel = ({ loading, setLoading }) => {
               <span style={{ color: "#FFFFFF" }}>You Won </span>
               <span style={{ color: "#F7BE44" }}>
                 {parseFloat(
-                  (nextMultiplier * houseEdge * bettingAmount).toFixed(2)
+                  (previousMultiplier * houseEdge * bettingAmount).toFixed(2)
                 )}
               </span>
             </Grid>
