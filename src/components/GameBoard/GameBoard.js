@@ -17,6 +17,15 @@ import claimEmotion from "../../assets/images/claimEmotion.png";
 import yellowRectangle from "../../assets/images/yellowrectangle.png";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 
+// Sound
+import Sound from "react-sound";
+import cashoutsound from "../../assets/audios/CashoutSound.mp3";
+import coinsound from "../../assets/audios/CoinSound.mp3";
+import coinstreak_sound from "../../assets/audios/CoinStreak.mp3";
+import hitbombsound from "../../assets/audios/HitBomb.mp3";
+import mineexplosionsound from "../../assets/audios/Mines_-_Explosion.mp3";
+import playgame_sound from "../../assets/audios/PlayGame.mp3";
+
 const GameBoard = () => {
   const { gameState, setGameState } = useGameStore();
   const { bettingAmount } = useGameStore();
@@ -33,6 +42,10 @@ const GameBoard = () => {
   const [winModalMultiplier, setWinModalMultiplier] = useState(1);
   const { publicKey, sendTransaction } = useWallet();
   const { previousMultiplier, setPreviousMultiplier } = useGameStore();
+
+  const [is_coinsound, setIs_coinsound] = useState(false);
+  const [is_mineexplosionsound, setIs_minesexplosion] = useState(false);
+  const [is_cashoutsound, setIs_cashoutsound] = useState(false);
 
   useEffect(() => {
     changeNextMultiplier();
@@ -93,6 +106,7 @@ const GameBoard = () => {
         console.log(boardClickedState);
 
         if (res.data.result === "bomb") {
+          setIs_minesexplosion(true);
           const body = {
             walletAddress: publicKey.toBase58(),
             game: "Minerush",
@@ -146,6 +160,8 @@ const GameBoard = () => {
           return;
         }
 
+        setIs_coinsound(true);
+
         console.log("set clicked state-----------------");
 
         newBoardState[boardNum] = 1;
@@ -171,7 +187,7 @@ const GameBoard = () => {
           // });
 
           // revealBoardState();
-
+          setIs_cashoutsound(true);
           const body = {
             walletAddress: publicKey.toBase58(),
             game: "Minerush",
@@ -277,6 +293,12 @@ const GameBoard = () => {
 
   const onClickWinCloseBtn = () => {
     setWinModalOpen(false);
+  };
+
+  const handleSongFinishedPlaying = () => {
+    setIs_coinsound(false);
+    setIs_minesexplosion(false);
+    setIs_cashoutsound(false);
   };
 
   const rectangle = boardState.map((item, key) => {
@@ -397,7 +419,6 @@ const GameBoard = () => {
             </Grid>
           </Box>
         </Modal>
-
         <Modal
           open={winFinalModalOpen}
           onClose={handleWinFinalModalClose}
@@ -424,24 +445,34 @@ const GameBoard = () => {
                   )}
                 </span>
               </Grid>
-
-              {/* <Button
-                variant="contained"
-                style={{
-                  marginTop: "10px",
-                  color: "#000",
-                  backgroundColor: "#F7BE44",
-                }}
-                onClick={onClickStopGame}
-                fontSize="10px"
-              >
-                Claim Reward
-              </Button> */}
-
               <img className="yellow-image-claim" src={yellowRectangle}></img>
             </Grid>
           </Box>
         </Modal>
+        <Sound
+          url={coinsound}
+          playStatus={
+            is_coinsound ? Sound.status.PLAYING : Sound.status.STOPPED
+          }
+          playFromPosition={0}
+          onFinishedPlaying={handleSongFinishedPlaying}
+        />
+        <Sound
+          url={mineexplosionsound}
+          playStatus={
+            is_mineexplosionsound ? Sound.status.PLAYING : Sound.status.STOPPED
+          }
+          playFromPosition={0}
+          onFinishedPlaying={handleSongFinishedPlaying}
+        />
+        <Sound
+          url={cashoutsound}
+          playStatus={
+            is_cashoutsound ? Sound.status.PLAYING : Sound.status.STOPPED
+          }
+          playFromPosition={0}
+          onFinishedPlaying={handleSongFinishedPlaying}
+        />
       </Grid>
     </>
   );

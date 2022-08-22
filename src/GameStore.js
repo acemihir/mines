@@ -29,7 +29,7 @@ const useGameStore = create((set) => ({
   ],
   bettingAmount: 0.5,
   mineAmount: 5,
-  houseEdge: 0.9,
+  houseEdge: 0.93,
   gameState: 0, // 0:before start, 1 : now playing,
   setNextMultiplier: (val) => {
     set({ nextMultiplier: val });
