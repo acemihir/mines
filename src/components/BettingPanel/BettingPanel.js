@@ -86,6 +86,26 @@ const BettingPanel = ({ loading, setLoading }) => {
     console.log(`Betting panel multiplier : ${tempMultiplier}`);
   };
 
+  const checkAlreadyDeposit = async () => {
+    const body = {
+      walletAddress: publicKey.toBase58(),
+    };
+    const result = {};
+    await axios
+      .post(`${process.env.REACT_APP_BACKEND_URL}/checkAlreadyDeposit`, body)
+      .then((res) => {
+        console.log(res.data);
+        result.bettingAmount = res.data.bettingAmount;
+        result.mineAmount = res.data.mineAmount;
+        result.result = res.data.result;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    return result;
+  };
+
   const onPlay = async () => {
     // wallet integration
     if (!connected) {
@@ -93,29 +113,24 @@ const BettingPanel = ({ loading, setLoading }) => {
       setConnectWalletModalOpen(true);
       return;
     }
-
     setWalletAddress(publicKey.toBase58());
-    console.log(`walletAddress in gameStore is ${walletAddress}`);
-    console.log(publicKey.toBase58());
 
+    // if user clicked "CASH OUT"
     if (gameState == 1) {
       setStopModalOpen(true);
-
-      // setGameStep(gameStep + 1);
-      // const cboardState = [
-      //   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      //   0,
-      // ];
-      // setBoardState(cboardState);
-
-      // setGameState(0);
-
       return;
     }
 
-    // wallet integration
-    const result = await deposit();
-    if (!result) console.log("false-----------------");
+    const depoResult = await checkAlreadyDeposit();
+    if (depoResult.result == "success") {
+      setBettingAmount(depoResult.bettingAmount);
+      setMineAmount(depoResult.mineAmount);
+      setGameState(1);
+    } else {
+      // Deposit SOL
+      const result = await deposit();
+    }
+
     console.log("play game");
     const cboardState = [
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -134,6 +149,7 @@ const BettingPanel = ({ loading, setLoading }) => {
     await postPlay();
   };
 
+  // Depoist User SOL
   const deposit = async () => {
     let amount = bettingAmount;
     console.log(amount * solanaWeb3.LAMPORTS_PER_SOL);
@@ -145,7 +161,7 @@ const BettingPanel = ({ loading, setLoading }) => {
       })
     );
 
-    console.log("transsaction");
+    console.log("tx has maded");
 
     const signature = await sendTransaction(transaction, connection);
     setLoading(true);
@@ -153,13 +169,13 @@ const BettingPanel = ({ loading, setLoading }) => {
     let tx = null;
 
     while (tx == null) {
-      console.log("ddd");
+      console.log("waiting for confirm tx");
       tx = await connection.getTransaction(signature, {
         commitment: "finalized",
       });
     }
 
-    console.log("transaction has sent");
+    console.log("tx has sent");
 
     await connection.confirmTransaction(signature);
 
@@ -174,6 +190,7 @@ const BettingPanel = ({ loading, setLoading }) => {
       walletAddress: publicKey.toBase58(),
       signature,
       bettingAmount,
+      mineAmount,
     };
 
     await axios
@@ -241,9 +258,8 @@ const BettingPanel = ({ loading, setLoading }) => {
           game: "Minerush",
           player: publicKey.toBase58(),
           wager: bettingAmount,
-          payout: nextMultiplier * bettingAmount,
+          payout: previousMultiplier * bettingAmount * houseEdge,
         };
-        console.log(body);
         await axios
           .post(`${process.env.REACT_APP_BACKEND_URL}/api/saveHistory`, body)
           .then((res) => {
@@ -309,6 +325,8 @@ const BettingPanel = ({ loading, setLoading }) => {
       mineAmount,
       bettingAmount,
     };
+
+    console.log(body);
 
     let res = await axios.post(
       `${process.env.REACT_APP_BACKEND_URL}/api/play`,
@@ -553,7 +571,7 @@ const BettingPanel = ({ loading, setLoading }) => {
       >
         <Box sx={styleStop}>
           <Typography color="#F7BE44" fontSize="70px" fontFamily="Mada">
-            x{parseFloat(previousMultiplier.toFixed(2))}
+            x{parseFloat((previousMultiplier * houseEdge).toFixed(2))}
           </Typography>
 
           <Grid container style={{ textAlign: "center" }}>
