@@ -59,7 +59,7 @@ const GameBoard = () => {
       return;
     } else {
       let tempMultiplier = 1;
-      for (let i = 0; i < gameStep+1; i++) {
+      for (let i = 0; i < gameStep + 1; i++) {
         tempMultiplier *= (25 - i) / (25 - i - mineAmount);
       }
       console.log(`gamestep is ${gameStep}`);
@@ -91,8 +91,7 @@ const GameBoard = () => {
       .then(async (res) => {
         const newBoardClickedState = boardClickedState;
         console.log(boardClickedState);
-        newBoardClickedState[boardNum] = 1;
-        setBoardClickedState(newBoardClickedState);
+
         if (res.data.result === "bomb") {
           const body = {
             walletAddress: publicKey.toBase58(),
@@ -102,14 +101,13 @@ const GameBoard = () => {
             payout: 0,
           };
           console.log(body);
-          await axios
-            .post(`${process.env.REACT_APP_BACKEND_URL}/api/saveHistory`, body)
-            .then((res) => {
-              console.log(res);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+
+          // newBoardClickedState[boardNum] = 1;
+          // setBoardClickedState(newBoardClickedState);
+          // console.log(boardClickedState);
+
+          newBoardClickedState[boardNum] = 1;
+          setBoardClickedState(newBoardClickedState);
 
           console.log(res.data);
           setGameState(0);
@@ -131,10 +129,25 @@ const GameBoard = () => {
           setPreviousMultiplier(1);
           setNextMultiplier(1);
           console.log("multi 5 ---------------------");
+          console.log(`allboard state before reveal is ${allBoardState}`);
+
           revealBoardState(allBoardState);
           console.log(boardClickedState);
+
+          await axios
+            .post(`${process.env.REACT_APP_BACKEND_URL}/api/saveHistory`, body)
+            .then((res) => {
+              console.log(res);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+
           return;
         }
+
+        console.log("set clicked state-----------------");
+
         newBoardState[boardNum] = 1;
         console.log(boardClickedState);
 
@@ -211,6 +224,7 @@ const GameBoard = () => {
         if (allBoardState[key] === 1) allBoardState[key] = 3;
         else allBoardState[key] = 4;
     });
+
     setBoardState(allBoardState);
     const cboardState = [
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
