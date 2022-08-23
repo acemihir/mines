@@ -20,7 +20,7 @@ const GamePlay = () => {
   }, []);
   return (
     <>
-      <Box sx={{ height: loading ? "100vh" : "initial", overflow: "hidden", backgroundImage: isDesktop ? `url(${background})` : "none" }}>
+      <Box className="background" sx={{ height: loading ? "100vh" : "initial", overflow: "hidden", backgroundImage: isDesktop ? `url(${background})` : "none" }}>
         <Box className="overlay">
           <Header />
           <Content
