@@ -79,3 +79,23 @@
     }
   }
 }
+
+.navbar-item {
+  background-color: #292d2c !important;
+  display: inline-flex;
+  width: 40px;
+  height: 30px;
+  border-radius: 10px;
+  margin: 0px 10px;
+  font-size: 16px;
+  color: white;
+  font-family: "Mada";
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  .control-option-image {
+    width: 16px;
+    height: 16px;
+  }
+}
