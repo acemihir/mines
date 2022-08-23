@@ -1,7 +1,8 @@
 .navbar {
   display: flex;
   justify-content: space-between;
-  padding: 5px 50px;
+  padding: 5px 3vw;
+  flex-wrap: wrap;
 
   .navbar-group {
     background-color: rgba(16, 16, 20, 0.21);
@@ -34,7 +35,7 @@
 
   .navlinks {
     .navbar-item {
-      width: 120px;
+      width: 100px;
     }
 
     .balance-image {
@@ -56,7 +57,7 @@
   line-height: 26px;
   letter-spacing: 0.05em;
   color: #ffffff;
-  margin-right: 50px;
+  margin-right: 3vw;
 }
 
 .rectangle-image {
@@ -82,12 +83,12 @@
     sans-serif;
   font-size: 16px;
   font-weight: 600;
-  height: 39px;
-  line-height: 48px;
+  height: 39px!important;
   padding: 0 11px;
   border-radius: 7px;
   margin-right: 9px;
   margin-left: 12px;
+  white-space: nowrap;
 }
  
 .wallet-adapter-button-trigger {

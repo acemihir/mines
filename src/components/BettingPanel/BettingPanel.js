@@ -5,8 +5,11 @@ import {
   Modal,
   Typography,
   TextField,
+  Stack,
   Slider,
+  useMediaQuery
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import messaging from "../../assets/images/messaging.png";
 import solana from "../../assets/images/solana.png";
 import options from "../../assets/images/setting.png";
@@ -24,6 +27,9 @@ import * as solanaWeb3 from "@solana/web3.js";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { sign } from "crypto";
 
+const BettingPanel = ({ loading, setLoading }) => {
+  const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up("sm"));
 // Sound
 import Sound from "react-sound";
 import cashoutsound from "../../assets/audios/CashoutSound.mp3";
@@ -379,8 +385,8 @@ const BettingPanel = ({ loading, setLoading, depositText, setDepositText }) => {
 
   return (
     <Grid className="bettingpanel-container" container>
-      <Grid xs={4} />
-      <Grid xs={4}>
+      <Grid xs={1} sm={2} md={3} lg={4} />
+      <Grid xs={10} sm={8} md={6} lg={4} >
         <Box
           className="settings-text"
           style={{ marginTop: "20px", marginBottom: "5px" }}
@@ -437,7 +443,14 @@ const BettingPanel = ({ loading, setLoading, depositText, setDepositText }) => {
             </div>
           </Button>
         </Box>
-        <Box className="betting-values-group">
+        <Box justifyContent="space-between" className="betting-values-group"
+          sx={{
+            display: isDesktop ? 'flex' : 'grid !important',
+            gridTemplateRows: 'repeat(2, auto)',
+            gridTemplateColumns: 'repeat(3, auto)',
+            rowGap: 2
+          }}
+        >
           <Button
             className="betting-values"
             onClick={() => onBettingClick(0.05)}
@@ -482,9 +495,9 @@ const BettingPanel = ({ loading, setLoading, depositText, setDepositText }) => {
           </Button>
         </Box>
       </Grid>
-      <Grid className="messaging-container" xs={4}>
+      <Grid className="messaging-container" xs={1} sm={2} md={3} lg={4} sx={{display: isDesktop? 'block': 'none!important'}} >
         <a>
-          <img className="message-link" src={messaging} />
+          <img className="message-link" src={messaging}/>
         </a>
       </Grid>
       <Modal

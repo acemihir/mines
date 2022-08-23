@@ -6,7 +6,9 @@ import {
   Button,
   Modal,
   autocompleteClasses,
+  useMediaQuery
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import Mine from "../Mine";
 import "./GameBoard.scss";
 import axios from "axios";
@@ -27,6 +29,8 @@ import mineexplosionsound from "../../assets/audios/Mines_-_Explosion.mp3";
 import playgame_sound from "../../assets/audios/PlayGame.mp3";
 
 const GameBoard = () => {
+  const theme = useTheme();
+  const matchUpMd = theme.breakpoints.up("md");
   const { gameState, setGameState } = useGameStore();
   const { bettingAmount } = useGameStore();
   const { boardState, setBoardState, walletAddress } = useGameStore();
@@ -296,24 +300,24 @@ const GameBoard = () => {
   return (
     <>
       <div style={{ display: "flex", justifyContent: "center", margin: "5px" }}>
-        <Typography className="multiplier">
+        <Typography className="multiplier" component="Stack" alignItems="center">
           Next Multiplier
-          <span className="multiplier-value">
+          <Typography component="span" className="multiplier-value" sx={{ diplay: 'flex', alignItems: 'center' }}>
             &nbsp; X
             {nextMultiplier == 1
               ? 1
               : parseFloat((nextMultiplier * houseEdge).toFixed(2))}
-          </span>
+          </Typography>
         </Typography>
       </div>
       <Grid className="gameboard-container" container>
-        <Grid xs={4} />
-        <Grid xs={4}>
+        <Grid xs={1} sm={2} md={3} lg={4} />
+        <Grid xs={10} sm={8} md={6} lg={4}>
           <Grid className="gameboard" container spacing={2}>
             {rectangle}
           </Grid>
         </Grid>
-        <Grid xs={4} />
+        <Grid xs={1} sm={2} md={3} lg={4} />
         <Modal
           open={gameOverModalOpen}
           onClose={handleGameOverModalClose}

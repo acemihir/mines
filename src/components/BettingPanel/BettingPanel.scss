@@ -139,8 +139,11 @@
     }
   }
   .messaging-container {
+    display: flex;
     text-align: end;
-    padding-right: 50px;
+    padding-right: 3vw;
+    justify-content: flex-end;
+    align-items: center;
 
     .message-link {
       width: 57px;
