@@ -9,6 +9,7 @@ import background from "../assets/images/hero.png";
 import "./GamePlay.scss";
 const GamePlay = () => {
   const [loading, setLoading] = useState(true);
+  const [depositText, setDepositText] = useState(false);
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("sm"));
 
@@ -22,11 +23,16 @@ const GamePlay = () => {
       <Box sx={{ height: loading ? "100vh" : "initial", overflow: "hidden", backgroundImage: isDesktop ? `url(${background})` : "none" }}>
         <Box className="overlay">
           <Header />
-          <Content loading={loading} setLoading={setLoading} />
+          <Content
+            loading={loading}
+            setLoading={setLoading}
+            depositText={depositText}
+            setDepositText={setDepositText}
+          />
           <Footer />
         </Box>
       </Box>
-      <Splash loading={loading} />
+      <Splash loading={loading} depositText={depositText} />
     </>
   );
 };

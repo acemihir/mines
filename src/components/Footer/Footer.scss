@@ -1,4 +1,3 @@
-
 .footer-container {
   margin-top: 30px;
 
@@ -7,42 +6,43 @@
     flex-direction: column;
   }
 }
-.footer-icons{
+.footer-icons {
   width: 36px;
   height: 36px;
   margin: 5px;
 }
-.copyright{
-  font-family: 'Mada';
+
+.copyright {
+  font-family: "Mada";
   font-style: normal;
   font-weight: 500;
   font-size: 12.5405px;
   line-height: 16px;
   letter-spacing: 0.05em;
-  color: #FFFFFF;
+  color: #ffffff;
 }
-.footer-items{
+.footer-items {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.solana-speed{
-  font-family: 'Mada';
+.solana-speed {
+  font-family: "Mada";
   font-style: normal;
   font-weight: 500;
   font-size: 12.5405px;
   line-height: 16px;
   letter-spacing: 0.05em;
-  color: #FFFFFF;
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: flex-end;
 
-  img{
+  img {
     width: auto;
     height: 16px;
   }
 }
-.footer-divider{
+.footer-divider {
   background: #212535;
 }

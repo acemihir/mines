@@ -30,6 +30,16 @@ import { sign } from "crypto";
 const BettingPanel = ({ loading, setLoading }) => {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("sm"));
+// Sound
+import Sound from "react-sound";
+import cashoutsound from "../../assets/audios/CashoutSound.mp3";
+import coin_sound from "../../assets/audios/CoinSound.mp3";
+import coinstreak_sound from "../../assets/audios/CoinStreak.mp3";
+import hitbomb_sound from "../../assets/audios/HitBomb.mp3";
+import mineexplosion_sound from "../../assets/audios/Mines_-_Explosion.mp3";
+import playgame_sound from "../../assets/audios/PlayGame.mp3";
+
+const BettingPanel = ({ loading, setLoading, depositText, setDepositText }) => {
   const { gameHistory, setGameHistory } = useGameStore();
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -55,6 +65,9 @@ const BettingPanel = ({ loading, setLoading }) => {
 
   const { connection } = useConnection();
   const [clicked, setClicked] = useState(false);
+
+  const [is_playgame_sound, setIs_playgame_sound] = useState(false);
+  const [is_cashoutsound, setIs_cashoutsound] = useState(false);
 
   const getHistory = async () => {
     await axios
@@ -112,6 +125,7 @@ const BettingPanel = ({ loading, setLoading }) => {
   };
 
   const onPlay = async () => {
+    setIs_playgame_sound(true);
     // wallet integration
     if (!connected) {
       console.log("plz connect wallet");
@@ -169,7 +183,11 @@ const BettingPanel = ({ loading, setLoading }) => {
     console.log("tx has maded");
 
     const signature = await sendTransaction(transaction, connection);
+
+    setDepositText(true);
     setLoading(true);
+
+    console.log("tx has confirmed");
 
     let tx = null;
 
@@ -213,6 +231,7 @@ const BettingPanel = ({ loading, setLoading }) => {
       .catch((err) => {
         console.log("err");
       });
+    setDepositText(false);
     setLoading(false);
   };
 
@@ -244,6 +263,7 @@ const BettingPanel = ({ loading, setLoading }) => {
   };
 
   const onClickStopGame = async () => {
+    setIs_cashoutsound(true);
     // if user double clicked "Claim Reward" button, it is ignored
     if (clicked == true) return;
     setClicked(true);
@@ -305,6 +325,7 @@ const BettingPanel = ({ loading, setLoading }) => {
   };
 
   const onClickCloseButton = () => {
+    setIs_playgame_sound(true);
     if ((mineAmount > 24) | (mineAmount < 1)) return;
     setMineAmount(mineSliderAmount);
     changeNextMultiplier();
@@ -312,16 +333,29 @@ const BettingPanel = ({ loading, setLoading }) => {
   };
 
   const onBettingClick = (val) => {
-    if (val == "plus")
-      setBettingAmount(parseFloat((bettingAmount + 0.1).toFixed(2)));
-    else if (val == "minus")
-      setBettingAmount(parseFloat((bettingAmount - 0.1).toFixed(2)));
-    else {
-      setBettingAmount(parseFloat(val.toFixed(2)));
+    setIs_playgame_sound(true);
+    if (val == "plus") {
+      if (bettingAmount == 0.05) setBettingAmount(0.1);
+      else if (bettingAmount == 0.1) setBettingAmount(0.25);
+      else if (bettingAmount == 0.25) setBettingAmount(0.5);
+      else if (bettingAmount == 0.5) setBettingAmount(1);
+      else if (bettingAmount == 1) setBettingAmount(2);
+      else if (bettingAmount == 2) return;
+      // setBettingAmount(parseFloat((bettingAmount + 0.1).toFixed(2)));
+    } else if (val == "minus") {
+      if (bettingAmount == 0.05) return;
+      else if (bettingAmount == 0.1) setBettingAmount(0.05);
+      else if (bettingAmount == 0.25) setBettingAmount(0.1);
+      else if (bettingAmount == 0.5) setBettingAmount(0.25);
+      else if (bettingAmount == 1) setBettingAmount(0.5);
+      else if (bettingAmount == 2) setBettingAmount(1);
     }
   };
 
-  const onOpen = () => setModalOpen(true);
+  const onOpen = () => {
+    setModalOpen(true);
+    setIs_playgame_sound(true);
+  };
 
   const postPlay = async () => {
     console.log("post play");
@@ -342,6 +376,11 @@ const BettingPanel = ({ loading, setLoading }) => {
 
   const handleSliderChange = (event, newVal) => {
     setMineSliderAmount(newVal);
+  };
+
+  const handleSongFinishedPlaying = () => {
+    setIs_playgame_sound(false);
+    setIs_cashoutsound(false);
   };
 
   return (
@@ -616,6 +655,22 @@ const BettingPanel = ({ loading, setLoading }) => {
           </Grid>
         </Box>
       </Modal>
+      <Sound
+        url={playgame_sound}
+        playStatus={
+          is_playgame_sound ? Sound.status.PLAYING : Sound.status.STOPPED
+        }
+        playFromPosition={0}
+        onFinishedPlaying={handleSongFinishedPlaying}
+      />
+      <Sound
+        url={cashoutsound}
+        playStatus={
+          is_cashoutsound ? Sound.status.PLAYING : Sound.status.STOPPED
+        }
+        playFromPosition={0}
+        onFinishedPlaying={handleSongFinishedPlaying}
+      />
     </Grid>
   );
 };
