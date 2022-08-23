@@ -6,7 +6,9 @@ import {
   Button,
   Modal,
   autocompleteClasses,
+  useMediaQuery
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import Mine from "../Mine";
 import "./GameBoard.scss";
 import axios from "axios";
@@ -18,6 +20,8 @@ import yellowRectangle from "../../assets/images/yellowrectangle.png";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 
 const GameBoard = () => {
+  const theme = useTheme();
+  const matchUpMd = theme.breakpoints.up("md");
   const { gameState, setGameState } = useGameStore();
   const { bettingAmount } = useGameStore();
   const { boardState, setBoardState, walletAddress } = useGameStore();
@@ -300,14 +304,14 @@ const GameBoard = () => {
   return (
     <>
       <div style={{ display: "flex", justifyContent: "center", margin: "5px" }}>
-        <Typography className="multiplier">
+        <Typography className="multiplier" component="Stack" alignItems="center">
           Next Multiplier
-          <span className="multiplier-value">
+          <Typography component="span" className="multiplier-value" sx={{ diplay: 'flex', alignItems: 'center' }}>
             &nbsp; X
             {nextMultiplier == 1
               ? 1
               : parseFloat((nextMultiplier * houseEdge).toFixed(2))}
-          </span>
+          </Typography>
         </Typography>
       </div>
       <Grid className="gameboard-container" container>

@@ -5,8 +5,11 @@ import {
   Modal,
   Typography,
   TextField,
+  Stack,
   Slider,
+  useMediaQuery
 } from "@mui/material";
+import { useTheme } from "@mui/material";
 import messaging from "../../assets/images/messaging.png";
 import solana from "../../assets/images/solana.png";
 import options from "../../assets/images/setting.png";
@@ -25,6 +28,8 @@ import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { sign } from "crypto";
 
 const BettingPanel = ({ loading, setLoading }) => {
+  const theme = useTheme();
+  const matchUpMd = useMediaQuery(theme.breakpoints.up("md"));
   const { gameHistory, setGameHistory } = useGameStore();
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -341,8 +346,8 @@ const BettingPanel = ({ loading, setLoading }) => {
 
   return (
     <Grid className="bettingpanel-container" container>
-      <Grid xs={4} />
-      <Grid xs={4}>
+      <Grid md={4} />
+      <Grid xs={12} sm={12} md={4} >
         <Box
           className="settings-text"
           style={{ marginTop: "20px", marginBottom: "5px" }}
@@ -399,7 +404,14 @@ const BettingPanel = ({ loading, setLoading }) => {
             </div>
           </Button>
         </Box>
-        <Box className="betting-values-group">
+        <Box justifyContent="space-between" className="betting-values-group"
+          sx={{
+            display: matchUpMd ? 'flex' : 'grid !important',
+            gridTemplateRows: 'repeat(2, auto)',
+            gridTemplateColumns: 'repeat(3, auto)',
+            rowGap: 2
+          }}
+        >
           <Button
             className="betting-values"
             onClick={() => onBettingClick(0.05)}
@@ -444,7 +456,7 @@ const BettingPanel = ({ loading, setLoading }) => {
           </Button>
         </Box>
       </Grid>
-      <Grid className="messaging-container" xs={4}>
+      <Grid className="messaging-container" sx={{ display: { md: 'flex', sm: 'block' }}} xs={12} sm={12} md={4}>
         <a>
           <img className="message-link" src={messaging} />
         </a>
