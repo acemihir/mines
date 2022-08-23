@@ -384,7 +384,7 @@ const BettingPanel = ({ loading, setLoading, depositText, setDepositText }) => {
   return (
     <Grid className="bettingpanel-container" container>
       <Grid xs={1} sm={2} md={3} lg={4} />
-      <Grid xs={10} sm={8} md={6} lg={4}>
+      <Grid className="bettingpanel-box" xs={10} sm={8} md={6} lg={4} style={isDesktop?{}:{backgroundColor: '#101112', padding: '5px'}}>
         <Box
           className="settings-text"
           style={{ marginTop: "20px", marginBottom: "5px" }}
@@ -398,13 +398,13 @@ const BettingPanel = ({ loading, setLoading, depositText, setDepositText }) => {
           )}
           <span>&nbsp;</span>
         </Box>
-        <Box className="betting-buttons" style={{ marginTop: "0px" }}>
+        <Box className="betting-buttons" style={isDesktop ? { marginTop: "0px" } : { justifyContent: 'space-between', padding: '0px' }}>
           <Box className="betting-amount">
             <Box className="betting-amount-value">
               <img className="solana-image" src={solana} />
               <span className="betting-value-text">{bettingAmount}</span>
             </Box>
-            <Box className="betting-amount-control">
+            <Box className="betting-amount-control" style={isDesktop ? {} : { display: 'none' }}>
               <Button
                 className="betting-amount-addition"
                 onClick={() => onBettingClick("plus")}
@@ -434,10 +434,8 @@ const BettingPanel = ({ loading, setLoading, depositText, setDepositText }) => {
             className="betting-options"
             onClick={onOpen}
             disabled={gameState == 0 ? false : true}
+            style={isDesktop ? {} : { display: 'none' }}
           >
-            {/* <img className="options-image" src={options}>
-            
-          </img> */}
             <div className="options-image " image={options}>
               {mineAmount}
             </div>
@@ -503,83 +501,82 @@ const BettingPanel = ({ loading, setLoading, depositText, setDepositText }) => {
             2
           </Button>
         </Box>
-        <Box
-          className="settings-text"
-          style={{ marginTop: "20px", marginBottom: "5px" }}
-        >
-          <span className="setting-amount">Number of bombs</span>
-          {isDesktop && (
-            <span className="minmax-values">
-              Min. Mine: <span className="betsetting-value">2</span> Max. Mine:{" "}
-              <span className="betsetting-value">24</span>
-            </span>
-          )}
-          <span>&nbsp;</span>
-        </Box>
-        <Box
-          justifyContent="space-between"
-          className="betting-values-group-mobile"
-          sx={{
-            display: isDesktop ? "flex" : "grid !important",
-            gridTemplateRows: "repeat(1, auto)",
-            gridTemplateColumns: "repeat(4, auto)",
-            rowGap: 1,
-          }}
-        >
-          <Button
-            className="betting-values"
-            onClick={() => onBettingClick(0.05)}
-            disabled={gameState == 0 ? false : true}
-            style={
-              isDesktop
-                ? {}
-                : { width: "100px", height: "25px", backgroundColor: "#22262F" }
-            }
-          >
-            3
-          </Button>
-          <Button
-            className="betting-values"
-            onClick={() => onBettingClick(0.1)}
-            disabled={gameState == 0 ? false : true}
-            style={
-              isDesktop
-                ? {}
-                : { width: "100px", height: "25px", backgroundColor: "#22262F" }
-            }
-          >
-            5
-          </Button>
-          <Button
-            className="betting-values"
-            onClick={() => onBettingClick(0.25)}
-            disabled={gameState == 0 ? false : true}
-            style={
-              isDesktop
-                ? {}
-                : { width: "100px", height: "25px", backgroundColor: "#22262F" }
-            }
-          >
-            10
-          </Button>
-          <Button
-            className="betting-values"
-            onClick={() => onBettingClick(0.25)}
-            disabled={gameState == 0 ? false : true}
-            style={
-              isDesktop
-                ? {}
-                : {
-                    width: "100px",
-                    height: "25px",
-                    backgroundColor: "#22262F",
-                    textTransform: "capitalize",
-                  }
-            }
-          >
-            Max
-          </Button>
-        </Box>
+        {!isDesktop &&
+          <>
+            <Box
+              className="settings-text"
+              style={{ marginTop: "20px", marginBottom: "5px" }}
+            >
+              <span className="setting-amount">Number of bombs</span>
+              <span>&nbsp;</span>
+            </Box>
+            <Box
+              justifyContent="space-between"
+              className="betting-values-group-mobile"
+              sx={{
+                display: isDesktop ? "flex" : "grid !important",
+                gridTemplateRows: "repeat(1, auto)",
+                gridTemplateColumns: "repeat(4, auto)",
+                rowGap: 1,
+              }}
+            >
+              <Button
+                className="betting-values"
+                onClick={() => onBettingClick(0.05)}
+                disabled={gameState == 0 ? false : true}
+                style={
+                  isDesktop
+                    ? {}
+                    : { width: "100px", height: "25px", backgroundColor: "#22262F" }
+                }
+              >
+                3
+              </Button>
+              <Button
+                className="betting-values"
+                onClick={() => onBettingClick(0.1)}
+                disabled={gameState == 0 ? false : true}
+                style={
+                  isDesktop
+                    ? {}
+                    : { width: "100px", height: "25px", backgroundColor: "#22262F" }
+                }
+              >
+                5
+              </Button>
+              <Button
+                className="betting-values"
+                onClick={() => onBettingClick(0.25)}
+                disabled={gameState == 0 ? false : true}
+                style={
+                  isDesktop
+                    ? {}
+                    : { width: "100px", height: "25px", backgroundColor: "#22262F" }
+                }
+              >
+                10
+              </Button>
+              <Button
+                className="betting-values"
+                onClick={() => onBettingClick(0.25)}
+                disabled={gameState == 0 ? false : true}
+                style={
+                  isDesktop
+                    ? {}
+                    : {
+                      width: "100px",
+                      height: "25px",
+                      backgroundColor: "#22262F",
+                      textTransform: "capitalize",
+                    }
+                }
+              >
+                Max
+              </Button>
+            </Box>
+          </>
+        }
+
       </Grid>
       <Grid
         className="messaging-container"
