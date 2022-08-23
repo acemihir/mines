@@ -17,7 +17,13 @@ import point from "../../assets/images/point.png";
 import "./RecentPlays.scss";
 import useGameStore from "../../GameStore";
 import axios from "axios";
+
+// sound
 import speaker from "../../assets/images/speaker.png";
+import speaker_mute from "../../assets/images/speaker_mute.png";
+import playgame_sound from "../../assets/audios/PlayGame.mp3";
+import Sound from "react-sound";
+import { useState } from "react";
 
 // responsive design
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -25,6 +31,9 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 const RecentPlays = () => {
   const isDesktop = useMediaQuery("(min-width:600px)");
   const { gameHistory, setGameHistory } = useGameStore();
+  const { isMuted, setIsMuted } = useGameStore();
+  const [is_playgame_sound, setIs_playgame_sound] = useState(false);
+
   const getHistory = async () => {
     await axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/api/history/get`)
@@ -46,6 +55,18 @@ const RecentPlays = () => {
       "..." +
       fullName.slice(fullName.length - 4, fullName.length - 1)
     );
+  };
+
+  const onVolumeClick = () => {
+    setIsMuted(!isMuted);
+  };
+
+  const handleClick = () => {
+    setIs_playgame_sound(true);
+  };
+
+  const handleSongFinishedPlaying = () => {
+    setIs_playgame_sound(false);
   };
 
   const historyList = gameHistory.map((item, key) => {
@@ -107,16 +128,40 @@ const RecentPlays = () => {
         )}
       </Grid>
       <Grid xs={0.5} sm={1} md={2} lg={2.5} />
+      <Sound
+        url={playgame_sound}
+        playStatus={
+          isMuted && is_playgame_sound
+            ? Sound.status.PLAYING
+            : Sound.status.STOPPED
+        }
+        playFromPosition={0}
+        onFinishedPlaying={handleSongFinishedPlaying}
+      />
 
       {!isDesktop && (
         <>
           <Grid xs={3} style={{ marginTop: "30px" }} />
           <Grid xs={3} style={{ marginTop: "30px" }}>
-            <Button className="navbar-item">LIGHT</Button>
+            <Button
+              className="footer-item"
+              style={{ borderRadius: "10px", color: "white" }}
+              onClick={handleClick}
+            >
+              LIGHT
+            </Button>
           </Grid>
           <Grid xs={3}>
-            <Button className="navbar-item" style={{ marginTop: "30px" }}>
-              <img className="control-option-image" src={speaker} />
+            <Button
+              className="footer-item"
+              style={{ marginTop: "30px", borderRadius: "10px" }}
+              onClick={onVolumeClick}
+            >
+              {isMuted ? (
+                <img className="control-option-image" src={speaker} />
+              ) : (
+                <img className="control-option-image" src={speaker_mute} />
+              )}
             </Button>
           </Grid>
           <Grid xs={3} />
