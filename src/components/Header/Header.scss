@@ -2,7 +2,8 @@
   display: flex;
   justify-content: space-between;
   padding: 5px 3vw;
-  flex-wrap: wrap;
+  flex-wrap: wrap-reverse;
+  flex-direction: row-reverse;
 
   .navbar-group {
     background-color: rgba(16, 16, 20, 0.21);
@@ -11,6 +12,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 5px 0px;
 
     .navbar-item {
       background-color: #101014;
@@ -84,13 +86,17 @@
   font-size: 16px;
   font-weight: 600;
   height: 39px!important;
-  padding: 0 11px;
-  border-radius: 7px;
-  margin-right: 9px;
-  margin-left: 12px;
+  padding: 0 11px!important;
+  border-radius: 7px!important;
+  margin-right: 9px!important;
+  margin-left: 12px!important;
   white-space: nowrap;
 }
  
 .wallet-adapter-button-trigger {
-  background-color: #101014;
+  background-color: #101014!important;
+}
+
+.wallet-adapter-dropdown-list-item {
+  display: none!important;
 }

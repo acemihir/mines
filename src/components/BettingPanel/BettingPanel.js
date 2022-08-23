@@ -25,11 +25,7 @@ import { useState } from "react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import * as solanaWeb3 from "@solana/web3.js";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
-import { sign } from "crypto";
 
-const BettingPanel = ({ loading, setLoading }) => {
-  const theme = useTheme();
-  const isDesktop = useMediaQuery(theme.breakpoints.up("sm"));
 // Sound
 import Sound from "react-sound";
 import cashoutsound from "../../assets/audios/CashoutSound.mp3";
@@ -39,7 +35,10 @@ import hitbomb_sound from "../../assets/audios/HitBomb.mp3";
 import mineexplosion_sound from "../../assets/audios/Mines_-_Explosion.mp3";
 import playgame_sound from "../../assets/audios/PlayGame.mp3";
 
+
 const BettingPanel = ({ loading, setLoading, depositText, setDepositText }) => {
+  const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up("sm"));
   const { gameHistory, setGameHistory } = useGameStore();
 
   const [modalOpen, setModalOpen] = useState(false);

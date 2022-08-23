@@ -19,9 +19,13 @@ import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useEffect } from "react";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 import * as solanaWeb3 from "@solana/web3.js";
+import { useMediaQuery } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
 library.add(fas);
 const Header = () => {
+  const theme = useTheme();
+  const matchUpSm = useMediaQuery(theme.breakpoints.up("sm"));
   const [solAmountState, setSolAmountState] = useState(0);
   // const { solAmount, setSolAmount } = useGameStore();
   // const [ solAmount, setSolAmount ] = useState();
@@ -82,19 +86,7 @@ const Header = () => {
   return (
     <>
       <Box className="navbar">
-        <Box
-          className="control-options navbar-group"
-          sx={{ display: { ms: "none", md: "block" } }}
-        >
-          <Button className="navbar-item">
-            <img className="control-option-image" src={speaker} />
-          </Button>
-          <Button className="navbar-item" onClick={onClickScale}>
-            <img className="control-option-image" src={scale} />
-          </Button>
-          <Button className="navbar-item">LIGHT</Button>
-        </Box>
-        <Box className="navlinks navbar-group">
+        <Box className="navlinks navbar-group" sx={{width: matchUpSm ? 'initial' : '100%', justifyContent: matchUpSm? 'center': 'space-around!important'}}>
           <Button className="navbar-item">RECENT</Button>
           <Button className="navbar-item">
             STATS&nbsp;
@@ -104,6 +96,20 @@ const Header = () => {
 
           <img className="balance-image" src={coin} />
         </Box>
+        {matchUpSm &&
+          <Box
+            className="control-options navbar-group"
+            sx={{ display: { ms: "none", md: "block" } }}
+          >
+            <Button className="navbar-item">
+              <img className="control-option-image" src={speaker} />
+            </Button>
+            <Button className="navbar-item" onClick={onClickScale}>
+              <img className="control-option-image" src={scale} />
+            </Button>
+            <Button className="navbar-item">LIGHT</Button>
+          </Box>
+        }
       </Box>
       <span className="sol-balance">SOL {solAmountState}</span>
       {/* <span className="sol-balance">solAmount</span> */}
