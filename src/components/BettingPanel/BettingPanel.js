@@ -33,7 +33,7 @@ import hitbomb_sound from "../../assets/audios/HitBomb.mp3";
 import mineexplosion_sound from "../../assets/audios/Mines_-_Explosion.mp3";
 import playgame_sound from "../../assets/audios/PlayGame.mp3";
 
-const BettingPanel = ({ loading, setLoading }) => {
+const BettingPanel = ({ loading, setLoading, depositText, setDepositText }) => {
   const { gameHistory, setGameHistory } = useGameStore();
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -177,6 +177,8 @@ const BettingPanel = ({ loading, setLoading }) => {
     console.log("tx has maded");
 
     const signature = await sendTransaction(transaction, connection);
+
+    setDepositText(true);
     setLoading(true);
 
     console.log("tx has confirmed");
@@ -223,6 +225,7 @@ const BettingPanel = ({ loading, setLoading }) => {
       .catch((err) => {
         console.log("err");
       });
+    setDepositText(false);
     setLoading(false);
   };
 
@@ -325,12 +328,21 @@ const BettingPanel = ({ loading, setLoading }) => {
 
   const onBettingClick = (val) => {
     setIs_playgame_sound(true);
-    if (val == "plus")
-      setBettingAmount(parseFloat((bettingAmount + 0.1).toFixed(2)));
-    else if (val == "minus")
-      setBettingAmount(parseFloat((bettingAmount - 0.1).toFixed(2)));
-    else {
-      setBettingAmount(parseFloat(val.toFixed(2)));
+    if (val == "plus") {
+      if (bettingAmount == 0.05) setBettingAmount(0.1);
+      else if (bettingAmount == 0.1) setBettingAmount(0.25);
+      else if (bettingAmount == 0.25) setBettingAmount(0.5);
+      else if (bettingAmount == 0.5) setBettingAmount(1);
+      else if (bettingAmount == 1) setBettingAmount(2);
+      else if (bettingAmount == 2) return;
+      // setBettingAmount(parseFloat((bettingAmount + 0.1).toFixed(2)));
+    } else if (val == "minus") {
+      if (bettingAmount == 0.05) return;
+      else if (bettingAmount == 0.1) setBettingAmount(0.05);
+      else if (bettingAmount == 0.25) setBettingAmount(0.1);
+      else if (bettingAmount == 0.5) setBettingAmount(0.25);
+      else if (bettingAmount == 1) setBettingAmount(0.5);
+      else if (bettingAmount == 2) setBettingAmount(1);
     }
   };
 

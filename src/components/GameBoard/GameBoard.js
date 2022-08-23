@@ -17,7 +17,7 @@ import claimEmotion from "../../assets/images/claimEmotion.png";
 import yellowRectangle from "../../assets/images/yellowrectangle.png";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 
-// Sound
+// import sounds
 import Sound from "react-sound";
 import cashoutsound from "../../assets/audios/CashoutSound.mp3";
 import coinsound from "../../assets/audios/CoinSound.mp3";
@@ -116,16 +116,11 @@ const GameBoard = () => {
           };
           console.log(body);
 
-          // newBoardClickedState[boardNum] = 1;
-          // setBoardClickedState(newBoardClickedState);
-          // console.log(boardClickedState);
-
           newBoardClickedState[boardNum] = 1;
           setBoardClickedState(newBoardClickedState);
 
           console.log(res.data);
           setGameState(0);
-          // setGameOverModalOpen(true);
           const allBoardState = JSON.parse(res.data.board.boardString);
           allBoardState.forEach((item, key) => {
             console.log("sdf");
@@ -142,8 +137,6 @@ const GameBoard = () => {
           setGameStep(0);
           setPreviousMultiplier(1);
           setNextMultiplier(1);
-          console.log("multi 5 ---------------------");
-          console.log(`allboard state before reveal is ${allBoardState}`);
 
           revealBoardState(allBoardState);
           console.log(boardClickedState);
@@ -159,10 +152,8 @@ const GameBoard = () => {
 
           return;
         }
-
+        // play coinsound
         setIs_coinsound(true);
-
-        console.log("set clicked state-----------------");
 
         newBoardState[boardNum] = 1;
         console.log(boardClickedState);
@@ -171,22 +162,7 @@ const GameBoard = () => {
 
         // if user WIN
         if (1 * gameStep + 1 * mineAmount == 24) {
-          // await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/getFullBoardState`, body)
-          // .then((res) => {
-
-          // })
-          // .catch((err) => {
-          //   console.log(err)
-          // })
-
-          // const allBoardState = JSON.parse(res.data.board.boardString);
-          // allBoardState.forEach((item, key) => {
-          //   console.log("sdf");
-          //   if (item === 0) allBoardState[key] = 1;
-          //   else allBoardState[key] = 2;
-          // });
-
-          // revealBoardState();
+          // play cashoutsound
           setIs_cashoutsound(true);
           const body = {
             walletAddress: publicKey.toBase58(),
@@ -221,9 +197,7 @@ const GameBoard = () => {
           console.log("here");
           return;
         }
-        console.log(`--------------Game step is ${gameStep}`);
         setGameStep(gameStep + 1);
-        console.log(`--------------Game step After set is ${gameStep}`);
 
         changeNextMultiplier();
         setBoardState(newBoardState);
@@ -373,9 +347,6 @@ const GameBoard = () => {
               <Grid item xs={12}>
                 <img className="yellow-image" src={yellowrectangle}></img>
               </Grid>
-              {/* <h2 id="parent-modal-title" style={{ color: "#F7BE44" }}>
-              Fair
-            </h2> */}
             </Grid>
           </Box>
         </Modal>
@@ -486,7 +457,6 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 300,
   bgcolor: "background.paper",
-  // border: "2px solid #000",
   borderRadius: "10px",
   boxShadow: 24,
   p: 4,
@@ -502,7 +472,6 @@ const styleStop = {
   width: "246px",
   height: "auto",
   bgcolor: "#101112",
-  // border: "2px solid #000",
   borderRadius: "10px",
   boxShadow: 24,
   p: 4,
@@ -518,7 +487,6 @@ const styleFair = {
   width: "270px",
   height: "316px",
   bgcolor: "background.paper",
-  // border: "2px solid #000",
   borderRadius: "10px",
   boxShadow: 24,
   p: 4,
