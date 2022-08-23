@@ -138,6 +138,23 @@
       color: black;
     }
   }
+  .betting-values-group-mobile {
+    width: 100%;
+
+    border-radius: 7px;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 5px;
+
+    .betting-values {
+      width: 53px;
+      height: 24px;
+      background: #f7be44;
+
+      border-radius: 7px;
+      color: white;
+    }
+  }
   .messaging-container {
     display: flex;
     text-align: end;

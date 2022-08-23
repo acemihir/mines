@@ -4,6 +4,8 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import coin from "../../assets/images/coin.png";
 import speaker from "../../assets/images/speaker.png";
+import speaker_mute from "../../assets/images/speaker_mute.png";
+
 import scale from "../../assets/images/scale.png";
 import chart from "../../assets/images/chart.png";
 import "./Header.scss";
@@ -31,6 +33,8 @@ const Header = () => {
   // const [ solAmount, setSolAmount ] = useState();
   const { connection } = useConnection();
   const { publicKey, sendTransaction } = useWallet();
+  const { isMuted, setIsMuted } = useGameStore();
+
   const {
     ready,
     connected,
@@ -83,10 +87,14 @@ const Header = () => {
     }
   };
 
+  const onVolumeClick = () => {
+    setIsMuted(!isMuted);
+  };
+
   return (
     <>
       <Box className="navbar">
-        <Box className="navlinks navbar-group" sx={{width: matchUpSm ? 'initial' : '100%', justifyContent: matchUpSm? 'center': 'space-around!important'}}>
+        <Box className="navlinks navbar-group" sx={{ width: matchUpSm ? 'initial' : '100%', justifyContent: matchUpSm ? 'center' : 'space-around!important' }}>
           <Button className="navbar-item">RECENT</Button>
           <Button className="navbar-item">
             STATS&nbsp;
@@ -102,7 +110,11 @@ const Header = () => {
             sx={{ display: { ms: "none", md: "block" } }}
           >
             <Button className="navbar-item">
-              <img className="control-option-image" src={speaker} />
+              {isMuted ? (
+                <img className="control-option-image" src={speaker} />
+              ) : (
+                <img className="control-option-image" src={speaker_mute} />
+              )}
             </Button>
             <Button className="navbar-item" onClick={onClickScale}>
               <img className="control-option-image" src={scale} />

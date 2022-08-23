@@ -7,7 +7,7 @@ import {
   TextField,
   Stack,
   Slider,
-  useMediaQuery
+  useMediaQuery,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import messaging from "../../assets/images/messaging.png";
@@ -25,7 +25,6 @@ import { useState } from "react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import * as solanaWeb3 from "@solana/web3.js";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
-
 // Sound
 import Sound from "react-sound";
 import cashoutsound from "../../assets/audios/CashoutSound.mp3";
@@ -40,13 +39,13 @@ const BettingPanel = ({ loading, setLoading, depositText, setDepositText }) => {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("sm"));
   const { gameHistory, setGameHistory } = useGameStore();
-
   const [modalOpen, setModalOpen] = useState(false);
   const [playModalOpen, setPlayModalOpen] = useState(false);
   const [stopModalOpen, setStopModalOpen] = useState(false);
   const [connectWalletModalOpen, setConnectWalletModalOpen] = useState(false);
 
   const { boardClickedState, setBoardClickedState } = useGameStore();
+  const { isMuted, setIsMuted } = useGameStore();
 
   const { walletAddress, setWalletAddress } = useGameStore();
   const { boardState, setBoardState } = useGameStore();
@@ -385,16 +384,18 @@ const BettingPanel = ({ loading, setLoading, depositText, setDepositText }) => {
   return (
     <Grid className="bettingpanel-container" container>
       <Grid xs={1} sm={2} md={3} lg={4} />
-      <Grid xs={10} sm={8} md={6} lg={4} >
+      <Grid xs={10} sm={8} md={6} lg={4}>
         <Box
           className="settings-text"
           style={{ marginTop: "20px", marginBottom: "5px" }}
         >
           <span className="setting-amount">Sol Amount</span>
-          <span className="minmax-values">
-            Min. Mine: <span className="betsetting-value">2</span> Max. Mine:{" "}
-            <span className="betsetting-value">24</span>
-          </span>
+          {isDesktop && (
+            <span className="minmax-values">
+              Min. Mine: <span className="betsetting-value">2</span> Max. Mine:{" "}
+              <span className="betsetting-value">24</span>
+            </span>
+          )}
           <span>&nbsp;</span>
         </Box>
         <Box className="betting-buttons" style={{ marginTop: "0px" }}>
@@ -442,18 +443,22 @@ const BettingPanel = ({ loading, setLoading, depositText, setDepositText }) => {
             </div>
           </Button>
         </Box>
-        <Box justifyContent="space-between" className="betting-values-group"
+        <Box
+          justifyContent="space-between"
+          className="betting-values-group"
           sx={{
-            display: isDesktop ? 'flex' : 'grid !important',
-            gridTemplateRows: 'repeat(2, auto)',
-            gridTemplateColumns: 'repeat(3, auto)',
-            rowGap: 2
+            display: isDesktop ? "flex" : "grid !important",
+            gridTemplateRows: "repeat(2, auto)",
+            gridTemplateColumns: "repeat(3, auto)",
+            rowGap: 2,
           }}
+          style={isDesktop ? {} : { background: "none" }}
         >
           <Button
             className="betting-values"
             onClick={() => onBettingClick(0.05)}
             disabled={gameState == 0 ? false : true}
+            style={isDesktop ? {} : { width: "135px", height: "35px" }}
           >
             0.05
           </Button>
@@ -461,6 +466,7 @@ const BettingPanel = ({ loading, setLoading, depositText, setDepositText }) => {
             className="betting-values"
             onClick={() => onBettingClick(0.1)}
             disabled={gameState == 0 ? false : true}
+            style={isDesktop ? {} : { width: "135px", height: "35px" }}
           >
             0.10
           </Button>
@@ -468,6 +474,7 @@ const BettingPanel = ({ loading, setLoading, depositText, setDepositText }) => {
             className="betting-values"
             onClick={() => onBettingClick(0.25)}
             disabled={gameState == 0 ? false : true}
+            style={isDesktop ? {} : { width: "135px", height: "35px" }}
           >
             0.25
           </Button>
@@ -475,6 +482,7 @@ const BettingPanel = ({ loading, setLoading, depositText, setDepositText }) => {
             className="betting-values"
             onClick={() => onBettingClick(0.5)}
             disabled={gameState == 0 ? false : true}
+            style={isDesktop ? {} : { width: "135px", height: "35px" }}
           >
             0.5
           </Button>
@@ -482,6 +490,7 @@ const BettingPanel = ({ loading, setLoading, depositText, setDepositText }) => {
             className="betting-values"
             onClick={() => onBettingClick(1)}
             disabled={gameState == 0 ? false : true}
+            style={isDesktop ? {} : { width: "135px", height: "35px" }}
           >
             1
           </Button>
@@ -489,14 +498,99 @@ const BettingPanel = ({ loading, setLoading, depositText, setDepositText }) => {
             className="betting-values"
             onClick={() => onBettingClick(2)}
             disabled={gameState == 0 ? false : true}
+            style={isDesktop ? {} : { width: "135px", height: "35px" }}
           >
             2
           </Button>
         </Box>
+        <Box
+          className="settings-text"
+          style={{ marginTop: "20px", marginBottom: "5px" }}
+        >
+          <span className="setting-amount">Number of bombs</span>
+          {isDesktop && (
+            <span className="minmax-values">
+              Min. Mine: <span className="betsetting-value">2</span> Max. Mine:{" "}
+              <span className="betsetting-value">24</span>
+            </span>
+          )}
+          <span>&nbsp;</span>
+        </Box>
+        <Box
+          justifyContent="space-between"
+          className="betting-values-group-mobile"
+          sx={{
+            display: isDesktop ? "flex" : "grid !important",
+            gridTemplateRows: "repeat(1, auto)",
+            gridTemplateColumns: "repeat(4, auto)",
+            rowGap: 1,
+          }}
+        >
+          <Button
+            className="betting-values"
+            onClick={() => onBettingClick(0.05)}
+            disabled={gameState == 0 ? false : true}
+            style={
+              isDesktop
+                ? {}
+                : { width: "100px", height: "25px", backgroundColor: "#22262F" }
+            }
+          >
+            3
+          </Button>
+          <Button
+            className="betting-values"
+            onClick={() => onBettingClick(0.1)}
+            disabled={gameState == 0 ? false : true}
+            style={
+              isDesktop
+                ? {}
+                : { width: "100px", height: "25px", backgroundColor: "#22262F" }
+            }
+          >
+            5
+          </Button>
+          <Button
+            className="betting-values"
+            onClick={() => onBettingClick(0.25)}
+            disabled={gameState == 0 ? false : true}
+            style={
+              isDesktop
+                ? {}
+                : { width: "100px", height: "25px", backgroundColor: "#22262F" }
+            }
+          >
+            10
+          </Button>
+          <Button
+            className="betting-values"
+            onClick={() => onBettingClick(0.25)}
+            disabled={gameState == 0 ? false : true}
+            style={
+              isDesktop
+                ? {}
+                : {
+                    width: "100px",
+                    height: "25px",
+                    backgroundColor: "#22262F",
+                    textTransform: "capitalize",
+                  }
+            }
+          >
+            Max
+          </Button>
+        </Box>
       </Grid>
-      <Grid className="messaging-container" xs={1} sm={2} md={3} lg={4} sx={{display: isDesktop? 'block': 'none!important'}} >
+      <Grid
+        className="messaging-container"
+        xs={1}
+        sm={2}
+        md={3}
+        lg={4}
+        sx={{ display: isDesktop ? "block" : "none!important" }}
+      >
         <a>
-          <img className="message-link" src={messaging}/>
+          <img className="message-link" src={messaging} />
         </a>
       </Grid>
       <Modal
@@ -515,19 +609,6 @@ const BettingPanel = ({ loading, setLoading, depositText, setDepositText }) => {
             >
               Number of Mines : {mineSliderAmount}
             </Typography>
-            {/* <TextField
-              id="outlined-number"
-              label="Mine Amount ( Max : 24, Min 1 )"
-              type="number"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              style={{}}
-              value={mineAmount}
-              onChange={(e) => {
-                setMineAmount(e.target.value);
-              }}
-            /> */}
           </Grid>
           <Grid>
             <Slider
@@ -597,20 +678,6 @@ const BettingPanel = ({ loading, setLoading, depositText, setDepositText }) => {
           <h2 id="parent-modal-title" style={{ color: "#fff" }}>
             Please connect your Wallet
           </h2>
-
-          {/* <Button
-            variant="contained"
-            style={{
-              marginTop: "10px",
-              color: "#000",
-              backgroundColor: "#F7BE44",
-            }}
-            onClick={onClickConnectWallet}
-            fontSize="10px"
-          >
-            Connect
-          </Button> */}
-          {/* <WalletMultiButton /> */}
         </Box>
       </Modal>
       <Modal
@@ -657,7 +724,9 @@ const BettingPanel = ({ loading, setLoading, depositText, setDepositText }) => {
       <Sound
         url={playgame_sound}
         playStatus={
-          is_playgame_sound ? Sound.status.PLAYING : Sound.status.STOPPED
+          isMuted && is_playgame_sound
+            ? Sound.status.PLAYING
+            : Sound.status.STOPPED
         }
         playFromPosition={0}
         onFinishedPlaying={handleSongFinishedPlaying}
@@ -665,7 +734,9 @@ const BettingPanel = ({ loading, setLoading, depositText, setDepositText }) => {
       <Sound
         url={cashoutsound}
         playStatus={
-          is_cashoutsound ? Sound.status.PLAYING : Sound.status.STOPPED
+          isMuted && is_cashoutsound
+            ? Sound.status.PLAYING
+            : Sound.status.STOPPED
         }
         playFromPosition={0}
         onFinishedPlaying={handleSongFinishedPlaying}
