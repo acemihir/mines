@@ -13,9 +13,9 @@ const Footer = () => {
   const isDesktop = useMediaQuery("(min-width:1200px)");
   return (
     <Grid className="footer-container" container>
+      {isDesktop && <Divider className="footer-divider" />}
       <Grid xs={3} />
       <Grid xs={6} className="footer-grid">
-        {isDesktop && <Divider className="footer-divider" />}
         <Box>
           <Grid container spacing={isDesktop ? 4 : 2}>
             <Grid className="footer-items" xs={isDesktop ? 4 : 12}>

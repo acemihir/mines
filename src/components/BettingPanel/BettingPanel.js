@@ -48,6 +48,7 @@ const BettingPanel = ({ loading, setLoading, depositText, setDepositText }) => {
   const [connectWalletModalOpen, setConnectWalletModalOpen] = useState(false);
 
   const { boardClickedState, setBoardClickedState } = useGameStore();
+  const { isMuted, setIsMuted } = useGameStore();
 
   const { walletAddress, setWalletAddress } = useGameStore();
   const { boardState, setBoardState } = useGameStore();
@@ -658,7 +659,9 @@ const BettingPanel = ({ loading, setLoading, depositText, setDepositText }) => {
       <Sound
         url={playgame_sound}
         playStatus={
-          is_playgame_sound ? Sound.status.PLAYING : Sound.status.STOPPED
+          isMuted && is_playgame_sound
+            ? Sound.status.PLAYING
+            : Sound.status.STOPPED
         }
         playFromPosition={0}
         onFinishedPlaying={handleSongFinishedPlaying}
@@ -666,7 +669,9 @@ const BettingPanel = ({ loading, setLoading, depositText, setDepositText }) => {
       <Sound
         url={cashoutsound}
         playStatus={
-          is_cashoutsound ? Sound.status.PLAYING : Sound.status.STOPPED
+          isMuted && is_cashoutsound
+            ? Sound.status.PLAYING
+            : Sound.status.STOPPED
         }
         playFromPosition={0}
         onFinishedPlaying={handleSongFinishedPlaying}

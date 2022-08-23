@@ -13,6 +13,7 @@ const useGameStore = create((set) => ({
   solAmount: 0,
   nextMultiplier: 1,
   previousMultiplier: 1,
+  isMuted: true, // if true volume one, if false volume is off
   gameHistory: [
     {
       game: "MineRush",
@@ -63,6 +64,9 @@ const useGameStore = create((set) => ({
   },
   setSolAmount: (val) => {
     set({ solAmount: val });
+  },
+  setIsMuted: (val) => {
+    set({ isMuted: val });
   },
 }));
 

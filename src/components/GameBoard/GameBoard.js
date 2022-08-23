@@ -50,6 +50,7 @@ const GameBoard = () => {
   const [is_coinsound, setIs_coinsound] = useState(false);
   const [is_mineexplosionsound, setIs_minesexplosion] = useState(false);
   const [is_cashoutsound, setIs_cashoutsound] = useState(false);
+  const { isMuted, setIsMuted } = useGameStore();
 
   useEffect(() => {
     changeNextMultiplier();
@@ -427,7 +428,9 @@ const GameBoard = () => {
         <Sound
           url={coinsound}
           playStatus={
-            is_coinsound ? Sound.status.PLAYING : Sound.status.STOPPED
+            isMuted && is_coinsound
+              ? Sound.status.PLAYING
+              : Sound.status.STOPPED
           }
           playFromPosition={0}
           onFinishedPlaying={handleSongFinishedPlaying}
@@ -435,7 +438,9 @@ const GameBoard = () => {
         <Sound
           url={mineexplosionsound}
           playStatus={
-            is_mineexplosionsound ? Sound.status.PLAYING : Sound.status.STOPPED
+            isMuted && is_mineexplosionsound
+              ? Sound.status.PLAYING
+              : Sound.status.STOPPED
           }
           playFromPosition={0}
           onFinishedPlaying={handleSongFinishedPlaying}
@@ -443,7 +448,9 @@ const GameBoard = () => {
         <Sound
           url={cashoutsound}
           playStatus={
-            is_cashoutsound ? Sound.status.PLAYING : Sound.status.STOPPED
+            isMuted && is_cashoutsound
+              ? Sound.status.PLAYING
+              : Sound.status.STOPPED
           }
           playFromPosition={0}
           onFinishedPlaying={handleSongFinishedPlaying}
