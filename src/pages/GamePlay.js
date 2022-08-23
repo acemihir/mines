@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
-import { useMediaQuery } from "@mui/material";
-import { useTheme, Box } from "@mui/material";
+import { useMediaQuery, Box } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import Header from "../components/Header";
 import Content from "../components/Content";
 import Footer from "../components/Footer";
 import Splash from "../components/Splash";
+import background from "../assets/images/hero.png";
 import "./GamePlay.scss";
 const GamePlay = () => {
   const [loading, setLoading] = useState(true);
   const theme = useTheme();
-  const matchUpMd = useMediaQuery(theme.breakpoints.up("md"));
+  const isDesktop = useMediaQuery(theme.breakpoints.up("sm"));
 
   useEffect(() => {
     setTimeout(() => {
@@ -18,10 +19,12 @@ const GamePlay = () => {
   }, []);
   return (
     <>
-      <Box sx={{ height: loading ? "100vh" : "initial", overflow: "hidden" }}>
-        <Header />
-        <Content loading={loading} setLoading={setLoading} />
-        <Footer />
+      <Box sx={{ height: loading ? "100vh" : "initial", overflow: "hidden", backgroundImage: isDesktop ? `url(${background})` : "none" }}>
+        <Box className="overlay">
+          <Header />
+          <Content loading={loading} setLoading={setLoading} />
+          <Footer />
+        </Box>
       </Box>
       <Splash loading={loading} />
     </>

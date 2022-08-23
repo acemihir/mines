@@ -315,13 +315,13 @@ const GameBoard = () => {
         </Typography>
       </div>
       <Grid className="gameboard-container" container>
-        <Grid xs={4} />
-        <Grid xs={4}>
+        <Grid xs={1} sm={2} md={3} lg={4} />
+        <Grid xs={10} sm={8} md={6} lg={4}>
           <Grid className="gameboard" container spacing={2}>
             {rectangle}
           </Grid>
         </Grid>
-        <Grid xs={4} />
+        <Grid xs={1} sm={2} md={3} lg={4} />
         <Modal
           open={gameOverModalOpen}
           onClose={handleGameOverModalClose}

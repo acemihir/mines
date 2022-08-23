@@ -20,7 +20,6 @@ import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import GamePlay from "./pages/GamePlay";
 import { Container, Box } from "@mui/material";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import background from "./assets/images/hero.png";
 import "./App.css";
 import { useMemo, useEffect } from "react";
 
@@ -73,15 +72,12 @@ function App() {
             className="App"
             disableGutters={true}
             maxWidth={false}
-            style={{ backgroundImage: `url(${background})` }}
           >
-            <Box className="overlay">
-              <Router>
-                <Routes>
-                  <Route path={"/"} element={<GamePlay />} />
-                </Routes>
-              </Router>
-            </Box>
+            <Router>
+              <Routes>
+                <Route path={"/"} element={<GamePlay />} />
+              </Routes>
+            </Router>
           </Container>
 
           <Router>
