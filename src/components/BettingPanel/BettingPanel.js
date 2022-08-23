@@ -330,6 +330,16 @@ const BettingPanel = ({ loading, setLoading, depositText, setDepositText }) => {
     setModalOpen(false);
   };
 
+  const onBNumberClick = (e, number) => {
+    setMineAmount(number);
+    const bNumbers = document.getElementsByClassName('bomb-amounts')
+
+    for (const bNumber of bNumbers) {
+      bNumber.classList.remove('active')
+    }
+    e.target.classList.add('active')
+  }
+
   const onBettingClick = (val) => {
     setIs_playgame_sound(true);
     if (val == "plus") {
@@ -384,7 +394,7 @@ const BettingPanel = ({ loading, setLoading, depositText, setDepositText }) => {
   return (
     <Grid className="bettingpanel-container" container>
       <Grid xs={1} sm={2} md={3} lg={4} />
-      <Grid className="bettingpanel-box" xs={10} sm={8} md={6} lg={4} style={isDesktop?{}:{backgroundColor: '#101112', padding: '5px'}}>
+      <Grid className="bettingpanel-box" xs={10} sm={8} md={6} lg={4} style={isDesktop ? {} : { backgroundColor: '#101112', padding: '5px' }}>
         <Box
           className="settings-text"
           style={{ marginTop: "20px", marginBottom: "5px" }}
@@ -521,44 +531,44 @@ const BettingPanel = ({ loading, setLoading, depositText, setDepositText }) => {
               }}
             >
               <Button
-                className="betting-values"
-                onClick={() => onBettingClick(0.05)}
+                className="bomb-amounts"
+                onClick={(e) => onBNumberClick(e, 3)}
                 disabled={gameState == 0 ? false : true}
                 style={
                   isDesktop
                     ? {}
-                    : { width: "100px", height: "25px", backgroundColor: "#22262F" }
+                    : { width: "100px", height: "25px" }
                 }
               >
                 3
               </Button>
               <Button
-                className="betting-values"
-                onClick={() => onBettingClick(0.1)}
+                className="bomb-amounts"
+                onClick={(e) => onBNumberClick(e, 5)}
                 disabled={gameState == 0 ? false : true}
                 style={
                   isDesktop
                     ? {}
-                    : { width: "100px", height: "25px", backgroundColor: "#22262F" }
+                    : { width: "100px", height: "25px" }
                 }
               >
                 5
               </Button>
               <Button
-                className="betting-values"
-                onClick={() => onBettingClick(0.25)}
+                className="bomb-amounts"
+                onClick={(e) => onBNumberClick(e, 10)}
                 disabled={gameState == 0 ? false : true}
                 style={
                   isDesktop
                     ? {}
-                    : { width: "100px", height: "25px", backgroundColor: "#22262F" }
+                    : { width: "100px", height: "25px" }
                 }
               >
                 10
               </Button>
               <Button
-                className="betting-values"
-                onClick={() => onBettingClick(0.25)}
+                className="bomb-amounts"
+                onClick={(e) => onBNumberClick(e, 24)}
                 disabled={gameState == 0 ? false : true}
                 style={
                   isDesktop
@@ -566,7 +576,6 @@ const BettingPanel = ({ loading, setLoading, depositText, setDepositText }) => {
                     : {
                       width: "100px",
                       height: "25px",
-                      backgroundColor: "#22262F",
                       textTransform: "capitalize",
                     }
                 }

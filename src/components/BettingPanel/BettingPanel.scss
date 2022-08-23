@@ -128,7 +128,7 @@
     justify-content: space-around;
     padding: 10px 5px;
 
-    .betting-values {
+    .betting-values{
       width: 53px;
       height: 24px;
       background: #f7be44;
@@ -146,13 +146,16 @@
     justify-content: space-around;
     padding: 10px 5px;
 
-    .betting-values {
+    .bomb-amounts {
       width: 53px;
       height: 24px;
-      background: #f7be44;
+      background: #22262F;
 
       border-radius: 7px;
       color: white;
+    }
+    .bomb-amounts.active {
+      background-color: #2b3953;
     }
   }
   .messaging-container {
